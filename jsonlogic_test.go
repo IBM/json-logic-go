@@ -1,6 +1,8 @@
 package jsonlogic
 
 import (
+	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -97,18 +99,18 @@ func TestNonRule(t *testing.T) {
 
 	//TODO: I am skipping here a test for "null". I don't think golang can handle this corner case.
 
-	//TODO: Arrays
-	// f = StringToInterface(`["a", "b"]`)
-	// result = Apply(f)
-
-	// if reflect.TypeOf(result) == []string && testEq(result, []string{"a", "b"}) {
-	// 	t.Error("expected [a,b], got", result)
-	// }
+	f = StringToInterface(`["a", "b"]`)
+	result = Apply(f)
+	var targetValue = []interface{}{"a", "b"} //DeepEqual only works for the same types
+	fmt.Println("target value is of type", reflect.TypeOf(targetValue))
+	if !reflect.DeepEqual(result, targetValue) {
+		t.Error("expected [a b], got", result)
+	}
 
 }
 
 // Helper methods
-func testEq(a, b []string) bool {
+func testEq(a, b []interface{}) bool {
 
 	if a == nil && b == nil {
 		return true
