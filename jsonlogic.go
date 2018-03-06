@@ -3,7 +3,7 @@ package jsonlogic
 import (
 	"encoding/json"
 	"fmt"
-	"os"
+	"reflect"
 )
 
 // StringToInterface converts a string json to an interface{}
@@ -13,36 +13,45 @@ func StringToInterface(input string) interface{} {
 	err := json.Unmarshal(b, &f)
 
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+		fmt.Println("Unmarshal warning:", err)
+		// The API supports sending just plain string. How to differentiate between an invalid json and a plain string?
+		return input
 	}
 
 	return f
 }
 
 // Apply takes in an interface{} and applies its logic
-func Apply(input interface{}) bool {
-	inputmap := input.(map[string]interface{})
+func Apply(input interface{}) interface{} {
+	fmt.Println("input is of type", reflect.TypeOf(input))
+	switch input.(type) {
+	case map[string]interface{}:
+		//It's a rule
+		inputmap := input.(map[string]interface{})
 
-	for operator, value := range inputmap {
-		switch operator {
-		case "==":
-			fmt.Println("detected ==")
-			valuearray := value.([]interface{})
-			value1 := valuearray[0]
-			value2 := valuearray[1]
-			return value1 == value2
-		case "!=":
-			fmt.Println("detected !=")
-			valuearray := value.([]interface{})
-			value1 := valuearray[0]
-			value2 := valuearray[1]
-			return value1 != value2
-		default:
-			fmt.Println("unrecognized operator", operator)
-			return false
+		for operator, value := range inputmap {
+			switch operator {
+			case "==":
+				valuearray := value.([]interface{})
+				value1 := valuearray[0]
+				value2 := valuearray[1]
+				return value1 == value2
+			case "!=":
+				valuearray := value.([]interface{})
+				value1 := valuearray[0]
+				value2 := valuearray[1]
+				return value1 != value2
+			default:
+				fmt.Println("unrecognized operator", operator)
+				return false
+			}
 		}
+		break
+	default:
+		//Non-rule
+		return input
 	}
 
-	return false
+	return nil
+
 }
