@@ -21,8 +21,24 @@ func StringToInterface(input string) interface{} {
 	return f
 }
 
-// Apply takes in an interface{} and applies its logic
-func Apply(inputs ...interface{}) interface{} {
+// Apply takes in a string rule and an optional string data and applies its logic
+func Apply(inputs ...string) interface{} {
+	var rule, data interface{}
+	if len(inputs) < 1 {
+		//TODO: Expected behavior with no params?
+		return nil
+	}
+	rule = StringToInterface(inputs[0])
+	if len(inputs) > 1 {
+		//We have data inputs
+		data = StringToInterface(inputs[1])
+	}
+
+	return ApplyInterfaces(rule, data)
+}
+
+// ApplyInterfaces takes in an interface{} and an optional interface{} data set and applies its logic
+func ApplyInterfaces(inputs ...interface{}) interface{} {
 	var rule, data interface{}
 	if len(inputs) < 1 {
 		//TODO: Expected behavior with no params?
@@ -46,16 +62,16 @@ func Apply(inputs ...interface{}) interface{} {
 				fallthrough //golang does not support '===', so It's the same as '=='. To be discussed.
 			case "==":
 				valuearray := value.([]interface{})
-				return Apply(valuearray[0], data) == Apply(valuearray[1], data)
+				return ApplyInterfaces(valuearray[0], data) == ApplyInterfaces(valuearray[1], data)
 			case "!==":
 				fallthrough //golang does not support '!==', so It's the same as '!='. To be discussed.
 			case "!=":
 				valuearray := value.([]interface{})
-				return Apply(valuearray[0], data) != Apply(valuearray[1], data)
+				return ApplyInterfaces(valuearray[0], data) != ApplyInterfaces(valuearray[1], data)
 			case "and":
 				valuearray := value.([]interface{})
 				for _, e := range valuearray {
-					if Apply(e, data) == false {
+					if ApplyInterfaces(e, data) == false {
 						return false
 					}
 				}

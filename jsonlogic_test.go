@@ -9,10 +9,9 @@ import (
 // Tests as defined in http://jsonlogic.com/tests.json
 func TestEqual(t *testing.T) {
 	var result interface{}
-	var f interface{}
 
-	f = StringToInterface(`{ "==" : [1, 1] }`)
-	result = Apply(f)
+	// f = StringToInterface(`{ "==" : [1, 1] }`)
+	result = Apply(`{ "==" : [1, 1] }`)
 	assert.Equal(t, true, result)
 
 	// TODO: This test fails. Do we care? It's in the official tests ..
@@ -20,33 +19,26 @@ func TestEqual(t *testing.T) {
 	// result = Apply(f)
 	// assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "==" : [1, 2] }`)
-	result = Apply(f)
+	result = Apply(`{ "==" : [1, 2] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "===" : [1, 1] }`)
-	result = Apply(f)
+	result = Apply(`{ "===" : [1, 1] }`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "===" : [1, "1"] }`)
-	result = Apply(f)
+	result = Apply(`{ "===" : [1, "1"] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "===" : [1, 2] }`)
-	result = Apply(f)
+	result = Apply(`{ "===" : [1, 2] }`)
 	assert.Equal(t, false, result)
 }
 
 func TestUnEqual(t *testing.T) {
 	var result interface{}
-	var f interface{}
 
-	f = StringToInterface(`{ "!=" : [1, 2] }`)
-	result = Apply(f)
+	result = Apply(`{ "!=" : [1, 2] }`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "!=" : [1, 1] }`)
-	result = Apply(f)
+	result = Apply(`{ "!=" : [1, 1] }`)
 	assert.Equal(t, false, result)
 
 	// TODO: Test is failing. Unsupported in go.
@@ -54,47 +46,37 @@ func TestUnEqual(t *testing.T) {
 	// result = Apply(f)
 	// assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "!==" : [1, 2] }`)
-	result = Apply(f)
+	result = Apply(`{ "!==" : [1, 2] }`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "!==" : [1, 1] }`)
-	result = Apply(f)
+	result = Apply(`{ "!==" : [1, 1] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "!==" : [1, "1"] }`)
-	result = Apply(f)
+	result = Apply(`{ "!==" : [1, "1"] }`)
 	assert.Equal(t, true, result)
 }
 
 func TestNonRule(t *testing.T) {
 	var result interface{}
-	var f interface{}
 
-	f = StringToInterface(`true`)
-	result = Apply(f)
+	result = Apply(`true`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`false`)
-	result = Apply(f)
+	result = Apply(`false`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`17`)
-	result = Apply(f)
+	result = Apply(`17`)
 	assert.Equal(t, float64(17), result)
 
-	f = StringToInterface(`3.14`)
-	result = Apply(f)
+	result = Apply(`3.14`)
 	assert.Equal(t, 3.14, result)
 
-	f = StringToInterface("apple")
-	result = Apply(f)
+	result = Apply("apple")
 	assert.Equal(t, "apple", result)
 
 	//TODO: I am skipping here a test for "null". I don't think golang can handle this corner case.
 
-	f = StringToInterface(`["a", "b"]`)
-	result = Apply(f)
+	result = Apply(`["a", "b"]`)
 	var targetValue = []interface{}{"a", "b"} //DeepEqual only works for the same types
 	assert.Equal(t, targetValue, result)
 
@@ -102,38 +84,29 @@ func TestNonRule(t *testing.T) {
 
 func TestAnd(t *testing.T) {
 	var result interface{}
-	var f interface{}
 
-	f = StringToInterface(`{ "and" : [true, true] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [true, true] }`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "and" : [false, true] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [false, true] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "and" : [true, false] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [true, false] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "and" : [false, false] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [false, false] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "and" : [true, true, true] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [true, true, true] }`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "and" : [true, true, false] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [true, true, false] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "and" : [false] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [false] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "and" : [true] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [true] }`)
 	assert.Equal(t, true, result)
 
 	// TODO: Apparently this is expected behavior in javascript. But not in golang!
@@ -141,82 +114,61 @@ func TestAnd(t *testing.T) {
 	// result = Apply(f)
 	// assert.Equal(t, 3, result)
 
-	f = StringToInterface(`{ "and" : [3, false] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [3, false] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{ "and" : [false, 3] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [false, 3] }`)
 	assert.Equal(t, false, result)
 }
 
 func TestCompound(t *testing.T) {
 	var result interface{}
-	var f interface{}
 
-	f = StringToInterface(`{ "and" : [{ "==" : [1, 1] }] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [{ "==" : [1, 1] }] }`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{ "and" : [{ "==" : [1, 2] }] }`)
-	result = Apply(f)
+	result = Apply(`{ "and" : [{ "==" : [1, 2] }] }`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{"and":[{"==":[1,1]},{"==":[1,2]}]}`)
-	result = Apply(f)
+	result = Apply(`{"and":[{"==":[1,1]},{"==":[1,2]}]}`)
 	assert.Equal(t, false, result)
 
-	f = StringToInterface(`{"and":[{"==":[1,1]},{"==":[2,2]}]}`)
-	result = Apply(f)
+	result = Apply(`{"and":[{"==":[1,1]},{"==":[2,2]}]}`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{"and":[{"==":[1,1]},true]}`)
-	result = Apply(f)
+	result = Apply(`{"and":[{"==":[1,1]},true]}`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,2]}]}]}`)
-	result = Apply(f)
+	result = Apply(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,2]}]}]}`)
 	assert.Equal(t, true, result)
 
-	f = StringToInterface(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,1]}]}]}`)
-	result = Apply(f)
+	result = Apply(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,1]}]}]}`)
 	assert.Equal(t, false, result)
+
 }
 
 func TestDataDriven(t *testing.T) {
-	var result, rule, data interface{}
+	var result interface{}
 
-	rule = StringToInterface(`{"var":["a"]}`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{"var":["a"]}`, `{"a":1}`)
 	assert.Equal(t, float64(1), result)
 
-	rule = StringToInterface(`{"var":["b"]}`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{"var":["b"]}`, `{"a":1}`)
 	assert.Equal(t, nil, result)
 
-	rule = StringToInterface(`{"var":["a"]}`)
-	result = Apply(rule)
+	result = Apply(`{"var":["a"]}`)
 	assert.Equal(t, nil, result)
 
-	rule = StringToInterface(`{"var":"a"}`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{"var":"a"}`, `{"a":1}`)
 	assert.Equal(t, float64(1), result)
 
-	rule = StringToInterface(`{"var":"b"}`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{"var":"b"}`, `{"a":1}`)
 	assert.Equal(t, nil, result)
 
-	rule = StringToInterface(`{"var":["a", 1]}`)
-	result = Apply(rule)
+	result = Apply(`{"var":["a", 1]}`)
 	assert.Equal(t, float64(1), result)
 
-	rule = StringToInterface(`{"var":["b", 2]}`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{"var":["b", 2]}`, `{"a":1}`)
 	assert.Equal(t, float64(2), result)
 
 	//TODO: dot-notation. This is an advanced case.
@@ -225,9 +177,7 @@ func TestDataDriven(t *testing.T) {
 	// result = Apply(rule, data)
 	// assert.Equal(t, "c", result)
 
-	rule = StringToInterface(`{"var":1}`)
-	data = StringToInterface(`["apple", "banana"]`)
-	result = Apply(rule, data)
+	result = Apply(`{"var":1}`, `["apple", "banana"]`)
 	assert.Equal(t, "banana", result)
 
 	//TODO: "1" is not the same as int(1) in Go! In javascript yes...
@@ -242,14 +192,10 @@ func TestDataDriven(t *testing.T) {
 	// result = Apply(rule, data)
 	// assert.Equal(t, "beer", result)
 
-	rule = StringToInterface(`{ "and" : [{ "==" : [1, {"var":"a"}] }] }`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{ "and" : [{ "==" : [1, {"var":"a"}] }] }`, `{"a":1}`)
 	assert.Equal(t, true, result)
 
-	rule = StringToInterface(`{ "and" : [{ "!=" : [1, {"var":"a"}] }] }`)
-	data = StringToInterface(`{"a":1}`)
-	result = Apply(rule, data)
+	result = Apply(`{ "and" : [{ "!=" : [1, {"var":"a"}] }] }`, `{"a":1}`)
 	assert.Equal(t, false, result)
 
 }
