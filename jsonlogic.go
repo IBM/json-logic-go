@@ -6,8 +6,8 @@ import (
 	"reflect"
 )
 
-// StringToInterface converts a string json to an interface{}
-func StringToInterface(input string) interface{} {
+// stringToInterface converts a string json to an interface{}
+func stringToInterface(input string) interface{} {
 	b := []byte(input)
 	var f interface{}
 	err := json.Unmarshal(b, &f)
@@ -28,17 +28,17 @@ func Apply(inputs ...string) interface{} {
 		//TODO: Expected behavior with no params?
 		return nil
 	}
-	rule = StringToInterface(inputs[0])
+	rule = stringToInterface(inputs[0])
 	if len(inputs) > 1 {
 		//We have data inputs
-		data = StringToInterface(inputs[1])
+		data = stringToInterface(inputs[1])
 	}
 
-	return ApplyInterfaces(rule, data)
+	return applyInterfaces(rule, data)
 }
 
-// ApplyInterfaces takes in an interface{} and an optional interface{} data set and applies its logic
-func ApplyInterfaces(inputs ...interface{}) interface{} {
+// applyInterfaces takes in an interface{} and an optional interface{} data set and applies its logic
+func applyInterfaces(inputs ...interface{}) interface{} {
 	var rule, data interface{}
 	if len(inputs) < 1 {
 		//TODO: Expected behavior with no params?
@@ -62,16 +62,16 @@ func ApplyInterfaces(inputs ...interface{}) interface{} {
 				fallthrough //golang does not support '===', so It's the same as '=='. To be discussed.
 			case "==":
 				valuearray := value.([]interface{})
-				return ApplyInterfaces(valuearray[0], data) == ApplyInterfaces(valuearray[1], data)
+				return applyInterfaces(valuearray[0], data) == applyInterfaces(valuearray[1], data)
 			case "!==":
 				fallthrough //golang does not support '!==', so It's the same as '!='. To be discussed.
 			case "!=":
 				valuearray := value.([]interface{})
-				return ApplyInterfaces(valuearray[0], data) != ApplyInterfaces(valuearray[1], data)
+				return applyInterfaces(valuearray[0], data) != applyInterfaces(valuearray[1], data)
 			case "and":
 				valuearray := value.([]interface{})
 				for _, e := range valuearray {
-					if ApplyInterfaces(e, data) == false {
+					if applyInterfaces(e, data) == false {
 						return false
 					}
 				}
