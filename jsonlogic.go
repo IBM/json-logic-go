@@ -31,11 +31,15 @@ func Apply(input interface{}) interface{} {
 
 		for operator, value := range inputmap {
 			switch operator {
+			case "===":
+				fallthrough //golang does not support '===', so It's the same as '=='. To be discussed.
 			case "==":
 				valuearray := value.([]interface{})
 				value1 := valuearray[0]
 				value2 := valuearray[1]
 				return value1 == value2
+			case "!==":
+				fallthrough //golang does not support '!==', so It's the same as '!='. To be discussed.
 			case "!=":
 				valuearray := value.([]interface{})
 				value1 := valuearray[0]
@@ -43,7 +47,7 @@ func Apply(input interface{}) interface{} {
 				return value1 != value2
 			default:
 				fmt.Println("unrecognized operator", operator)
-				return false
+				return nil
 			}
 		}
 		break
