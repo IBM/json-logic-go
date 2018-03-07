@@ -81,14 +81,14 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				switch value.(type) {
 				case []interface{}: // An array of values
 					valuearray := value.([]interface{})
-					value1 := valuearray[0]
+					value1 := applyInterfaces(valuearray[0], data)
 					var value2 interface{}
 					if len(valuearray) > 1 {
-						value2 = valuearray[1]
+						value2 = applyInterfaces(valuearray[1], data)
 					}
 					return dataLookup(data, value1, value2)
 				default: // A single value
-					return dataLookup(data, value, nil)
+					return dataLookup(data, applyInterfaces(value, data), nil)
 				}
 
 			default:
