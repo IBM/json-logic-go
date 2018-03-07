@@ -182,3 +182,74 @@ func TestCompound(t *testing.T) {
 	result = Apply(f)
 	assert.Equal(t, false, result)
 }
+
+func TestDataDriven(t *testing.T) {
+	var result, rule, data interface{}
+
+	rule = StringToInterface(`{"var":["a"]}`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, float64(1), result)
+
+	rule = StringToInterface(`{"var":["b"]}`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, nil, result)
+
+	rule = StringToInterface(`{"var":["a"]}`)
+	result = Apply(rule)
+	assert.Equal(t, nil, result)
+
+	rule = StringToInterface(`{"var":"a"}`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, float64(1), result)
+
+	rule = StringToInterface(`{"var":"b"}`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, nil, result)
+
+	rule = StringToInterface(`{"var":["a", 1]}`)
+	result = Apply(rule)
+	assert.Equal(t, float64(1), result)
+
+	rule = StringToInterface(`{"var":["b", 2]}`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, float64(2), result)
+
+	//TODO: dot-notation. This is an advanced case.
+	// rule = StringToInterface(`{"var":"a.b"}`)
+	// data = StringToInterface(`{"a":{"b":"c"}}`)
+	// result = Apply(rule, data)
+	// assert.Equal(t, "c", result)
+
+	rule = StringToInterface(`{"var":1}`)
+	data = StringToInterface(`["apple", "banana"]`)
+	result = Apply(rule, data)
+	assert.Equal(t, "banana", result)
+
+	//TODO: "1" is not the same as int(1) in Go! In javascript yes...
+	// rule = StringToInterface(`{"var":"1"}`)
+	// data = StringToInterface(`["apple", "banana"]`)
+	// result = Apply(rule, data)
+	// assert.Equal(t, "banana", result)
+
+	//TODO; dot-notation, advanced use
+	// rule = StringToInterface(`{"var":"1.1"}`)
+	// data = StringToInterface(`["apple", ["banana", "beer"]]`)
+	// result = Apply(rule, data)
+	// assert.Equal(t, "beer", result)
+
+	rule = StringToInterface(`{ "and" : [{ "==" : [1, {"var":"a"}] }] }`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, true, result)
+
+	rule = StringToInterface(`{ "and" : [{ "!=" : [1, {"var":"a"}] }] }`)
+	data = StringToInterface(`{"a":1}`)
+	result = Apply(rule, data)
+	assert.Equal(t, false, result)
+
+}

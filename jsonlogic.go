@@ -22,12 +22,23 @@ func StringToInterface(input string) interface{} {
 }
 
 // Apply takes in an interface{} and applies its logic
-func Apply(input interface{}) interface{} {
-	fmt.Println("input is of type", reflect.TypeOf(input))
-	switch input.(type) {
+func Apply(inputs ...interface{}) interface{} {
+	var rule, data interface{}
+	if len(inputs) < 1 {
+		//TODO: Expected behavior with no params?
+		return nil
+	}
+	rule = inputs[0]
+	if len(inputs) > 1 {
+		//We have data inputs
+		data = inputs[1]
+	}
+
+	fmt.Println("rule is of type", reflect.TypeOf(rule))
+	switch rule.(type) {
 	case map[string]interface{}:
 		//It's a rule
-		inputmap := input.(map[string]interface{})
+		inputmap := rule.(map[string]interface{})
 
 		for operator, value := range inputmap {
 			switch operator {
@@ -35,29 +46,34 @@ func Apply(input interface{}) interface{} {
 				fallthrough //golang does not support '===', so It's the same as '=='. To be discussed.
 			case "==":
 				valuearray := value.([]interface{})
-				value1 := valuearray[0]
-				value2 := valuearray[1]
-				return value1 == value2
+				return Apply(valuearray[0], data) == Apply(valuearray[1], data)
 			case "!==":
 				fallthrough //golang does not support '!==', so It's the same as '!='. To be discussed.
 			case "!=":
 				valuearray := value.([]interface{})
-				value1 := valuearray[0]
-				value2 := valuearray[1]
-				return value1 != value2
+				return Apply(valuearray[0], data) != Apply(valuearray[1], data)
 			case "and":
 				valuearray := value.([]interface{})
 				for _, e := range valuearray {
-					switch e.(type) { //A switch just for 1 case? Need to review this ...
-					case map[string]interface{}:
-						// It's a subrule
-						e = Apply(e)
-					}
-					if e == false {
+					if Apply(e, data) == false {
 						return false
 					}
 				}
 				return true
+			case "var":
+				fmt.Println("var type is", reflect.TypeOf(value))
+				switch value.(type) {
+				case []interface{}: // An array of values
+					valuearray := value.([]interface{})
+					value1 := valuearray[0]
+					var value2 interface{}
+					if len(valuearray) > 1 {
+						value2 = valuearray[1]
+					}
+					return dataLookup(data, value1, value2)
+				default: // A single value
+					return dataLookup(data, value, nil)
+				}
 
 			default:
 				fmt.Println("unrecognized operator", operator)
@@ -67,9 +83,37 @@ func Apply(input interface{}) interface{} {
 		break
 	default:
 		//Non-rule
-		return input
+		return rule
 	}
 
 	return nil
 
+}
+
+func dataLookup(data interface{}, index interface{}, defaultValue interface{}) interface{} {
+	fmt.Println("data type =", reflect.TypeOf(data))
+	fmt.Println("index type", reflect.TypeOf(index))
+	switch data.(type) {
+	case map[string]interface{}:
+		switch index.(type) {
+		case string:
+			value, ok := data.(map[string]interface{})[index.(string)]
+			if ok == true {
+				return value
+			}
+			return defaultValue
+
+		}
+	case []interface{}:
+		dataArray := data.([]interface{})
+		switch index.(type) {
+		case float64:
+			indexInt := int(index.(float64))
+			if len(dataArray) >= indexInt+1 {
+				return dataArray[indexInt]
+			}
+			return defaultValue
+		}
+	}
+	return defaultValue
 }
