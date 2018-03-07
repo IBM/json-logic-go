@@ -180,5 +180,5 @@ func TestCompound(t *testing.T) {
 
 	f = StringToInterface(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,1]}]}]}`)
 	result = Apply(f)
-	assert.Equal(t, true, result)
+	assert.Equal(t, false, result)
 }
