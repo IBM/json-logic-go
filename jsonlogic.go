@@ -45,6 +45,15 @@ func Apply(input interface{}) interface{} {
 				value1 := valuearray[0]
 				value2 := valuearray[1]
 				return value1 != value2
+			case "and":
+				valuearray := value.([]interface{})
+				for _, e := range valuearray {
+					if e == false {
+						return false
+					}
+				}
+				return true
+
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil

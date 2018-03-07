@@ -99,3 +99,53 @@ func TestNonRule(t *testing.T) {
 	assert.Equal(t, targetValue, result)
 
 }
+
+func TestAnd(t *testing.T) {
+	var result interface{}
+	var f interface{}
+
+	f = StringToInterface(`{ "and" : [true, true] }`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	f = StringToInterface(`{ "and" : [false, true] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{ "and" : [true, false] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{ "and" : [false, false] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{ "and" : [true, true, true] }`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	f = StringToInterface(`{ "and" : [true, true, false] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{ "and" : [false] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{ "and" : [true] }`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	// TODO: Apparently this is expected behavior in javascript. But not in golang!
+	// f = StringToInterface(`{ "and" : [1, 3] }`)
+	// result = Apply(f)
+	// assert.Equal(t, 3, result)
+
+	f = StringToInterface(`{ "and" : [3, false] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{ "and" : [false, 3] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+}
