@@ -48,6 +48,11 @@ func Apply(input interface{}) interface{} {
 			case "and":
 				valuearray := value.([]interface{})
 				for _, e := range valuearray {
+					switch e.(type) { //A switch just for 1 case? Need to review this ...
+					case map[string]interface{}:
+						// It's a subrule
+						e = Apply(e)
+					}
 					if e == false {
 						return false
 					}

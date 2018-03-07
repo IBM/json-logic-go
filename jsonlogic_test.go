@@ -149,3 +149,36 @@ func TestAnd(t *testing.T) {
 	result = Apply(f)
 	assert.Equal(t, false, result)
 }
+
+func TestCompound(t *testing.T) {
+	var result interface{}
+	var f interface{}
+
+	f = StringToInterface(`{ "and" : [{ "==" : [1, 1] }] }`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	f = StringToInterface(`{ "and" : [{ "==" : [1, 2] }] }`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{"and":[{"==":[1,1]},{"==":[1,2]}]}`)
+	result = Apply(f)
+	assert.Equal(t, false, result)
+
+	f = StringToInterface(`{"and":[{"==":[1,1]},{"==":[2,2]}]}`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	f = StringToInterface(`{"and":[{"==":[1,1]},true]}`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	f = StringToInterface(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,2]}]}]}`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+
+	f = StringToInterface(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,1]}]}]}`)
+	result = Apply(f)
+	assert.Equal(t, true, result)
+}
