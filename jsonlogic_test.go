@@ -1,9 +1,9 @@
 package jsonlogic
 
 import (
-	"fmt"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEqual(t *testing.T) {
@@ -12,31 +12,26 @@ func TestEqual(t *testing.T) {
 
 	f = StringToInterface(`{ "==" : [1, 1] }`)
 	result = Apply(f)
-
-	if result != true {
-		t.Error("expected true, got", result)
-	}
+	assert.Equal(t, result, true)
 
 	f = StringToInterface(`{ "==" : [1, 1.0] }`)
 	result = Apply(f)
-
-	if result != true {
-		t.Error("expected true, got", result)
-	}
+	assert.Equal(t, result, true)
 
 	f = StringToInterface(`{ "==" : [1, 1.1] }`)
 	result = Apply(f)
-
-	if result != false {
-		t.Error("expected false, got", result)
-	}
+	assert.Equal(t, result, false)
 
 	f = StringToInterface(`{ "==" : [1, 0] }`)
 	result = Apply(f)
+	assert.Equal(t, result, false)
 
-	if result != false {
-		t.Error("expected false, got", result)
-	}
+	// f = StringToInterface(`{ "==" : [1, "1"] }`)
+	// result = Apply(f)
+
+	// if result != true {
+	// 	t.Error("expected true, got", result)
+	// }
 }
 
 func TestUnEqual(t *testing.T) {
@@ -45,17 +40,11 @@ func TestUnEqual(t *testing.T) {
 
 	f = StringToInterface(`{ "!=" : [1, 0] }`)
 	result = Apply(f)
-
-	if result != true {
-		t.Error("expected true, got", result)
-	}
+	assert.Equal(t, result, true)
 
 	f = StringToInterface(`{ "!=" : [1, 1] }`)
 	result = Apply(f)
-
-	if result != false {
-		t.Error("expected false, got", result)
-	}
+	assert.Equal(t, result, false)
 }
 
 func TestNonRule(t *testing.T) {
@@ -64,71 +53,29 @@ func TestNonRule(t *testing.T) {
 
 	f = StringToInterface(`true`)
 	result = Apply(f)
-
-	if result != true {
-		t.Error("expected true, got", result)
-	}
+	assert.Equal(t, result, true)
 
 	f = StringToInterface(`false`)
 	result = Apply(f)
-
-	if result != false {
-		t.Error("expected false, got", result)
-	}
+	assert.Equal(t, result, false)
 
 	f = StringToInterface(`17`)
 	result = Apply(f)
-
-	if result != 17.0 { // Note, it seems like all json numerics are float64
-		t.Error("expected 17, got", result)
-	}
+	assert.Equal(t, result, float64(17))
 
 	f = StringToInterface(`3.14`)
 	result = Apply(f)
-
-	if result != 3.14 {
-		t.Error("expected 3.14, got", result)
-	}
+	assert.Equal(t, result, 3.14)
 
 	f = StringToInterface("apple")
 	result = Apply(f)
-
-	if result != "apple" {
-		t.Error("expected apple, got", result)
-	}
+	assert.Equal(t, result, "apple")
 
 	//TODO: I am skipping here a test for "null". I don't think golang can handle this corner case.
 
 	f = StringToInterface(`["a", "b"]`)
 	result = Apply(f)
 	var targetValue = []interface{}{"a", "b"} //DeepEqual only works for the same types
-	fmt.Println("target value is of type", reflect.TypeOf(targetValue))
-	if !reflect.DeepEqual(result, targetValue) {
-		t.Error("expected [a b], got", result)
-	}
+	assert.Equal(t, result, targetValue)
 
-}
-
-// Helper methods
-func testEq(a, b []interface{}) bool {
-
-	if a == nil && b == nil {
-		return true
-	}
-
-	if a == nil || b == nil {
-		return false
-	}
-
-	if len(a) != len(b) {
-		return false
-	}
-
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-
-	return true
 }
