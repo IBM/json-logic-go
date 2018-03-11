@@ -1,6 +1,7 @@
 package jsonlogic
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -46,8 +47,11 @@ func TestAll(t *testing.T) {
 			rule = test.([]interface{})[0]
 			data = test.([]interface{})[1]
 			expected = test.([]interface{})[2]
-			b, _ := json.Marshal(test)
-			json := string(b[:])
+			b := new(bytes.Buffer)
+			enc := json.NewEncoder(b)
+			enc.SetEscapeHTML(false)
+			enc.Encode(test)
+			json := b.String()
 			assert.Equal(t, expected, applyInterfaces(rule, data), json)
 		default:
 			//Skip comments

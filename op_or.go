@@ -2,10 +2,12 @@ package jsonlogic
 
 func opOr(value interface{}, data interface{}) interface{} {
 	valuearray := value.([]interface{})
+	var lastValue interface{}
 	for _, e := range valuearray {
-		if applyInterfaces(e, data) == true {
+		if truthy(applyInterfaces(e, data)) {
 			return e
 		}
+		lastValue = e
 	}
-	return false
+	return lastValue
 }

@@ -11,8 +11,10 @@ func truthy(input interface{}) bool {
 	switch input.(type) {
 	case bool:
 		return input.(bool)
-	case float64, int: //Real world are floats, but tests use real types
-		return (input != 0)
+	case float64:
+		return (input.(float64) != 0)
+	case int:
+		return (input.(int) != 0)
 	case []interface{}: //Real world are interfaces, but tests use real types
 		return len(input.([]interface{})) != 0
 	case string:
