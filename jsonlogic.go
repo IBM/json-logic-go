@@ -67,13 +67,7 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				valuearray := value.([]interface{})
 				return applyInterfaces(valuearray[0], data) != applyInterfaces(valuearray[1], data)
 			case "and":
-				valuearray := value.([]interface{})
-				for _, e := range valuearray {
-					if applyInterfaces(e, data) == false {
-						return false
-					}
-				}
-				return true
+				return opAnd(value, data)
 			case "or":
 				return opOr(value, data)
 			case "var":
