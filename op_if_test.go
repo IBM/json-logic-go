@@ -27,16 +27,16 @@ func TestIf(t *testing.T) {
 	// result = Apply(`{ "if" : [false, "yes", {">": [2, 1]}]}`)
 	// assert.Equal(t, true, result)
 
-	// result = Apply(`{ "if" : []}`)
-	// assert.Equal(t, nil, result)
+	result = Apply(`{ "if" : []}`)
+	assert.Equal(t, nil, result)
 
-	// result = Apply(`{ "if" : null}`)
-	// assert.Equal(t, nil, result)
+	result = Apply(`{ "if" : null}`)
+	assert.Equal(t, nil, result)
 
-	// result = Apply(`{ "if" : true}`)
-	// assert.Equal(t, true, result)
+	result = Apply(`{ "if" : true}`)
+	assert.Equal(t, true, result)
 
-	// result = Apply(`{ "if" : false}`)
-	// assert.Equal(t, false, result)
+	result = Apply(`{ "if" : false}`)
+	assert.Equal(t, false, result)
 
 }

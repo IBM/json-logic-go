@@ -11,6 +11,10 @@ package jsonlogic
 // ]}
 
 func opIf(value interface{}, data interface{}) interface{} {
+	if value == nil {
+		return nil
+	}
+
 	switch value.(type) {
 	case []interface{}: // An array of values
 		valuearray := value.([]interface{})
@@ -19,12 +23,20 @@ func opIf(value interface{}, data interface{}) interface{} {
 			return nil
 		}
 
-		condition := truthy(applyInterfaces(valuearray[0], data))
+		condition := applyInterfaces(valuearray[0], data)
 
-		if condition {
+		if len(valuearray) == 1 {
+			return condition
+		}
+
+		if truthy(condition) {
 			return applyInterfaces(valuearray[1], data)
 		} else {
-			return applyInterfaces(valuearray[2], data)
+			if len(valuearray) > 2 {
+				return applyInterfaces(valuearray[2], data)
+			}
+
+			return nil
 		}
 
 	default: // A single value
