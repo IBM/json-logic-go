@@ -3,7 +3,6 @@ package jsonlogic
 import (
 	"encoding/json"
 	"fmt"
-	"reflect"
 )
 
 // stringToInterface converts a string json to an interface{}
@@ -50,7 +49,6 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 		data = inputs[1]
 	}
 
-	fmt.Println("rule is of type", reflect.TypeOf(rule))
 	switch rule.(type) {
 	case map[string]interface{}:
 		//It's a rule
@@ -77,7 +75,6 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				}
 				return true
 			case "var":
-				fmt.Println("var type is", reflect.TypeOf(value))
 				switch value.(type) {
 				case []interface{}: // An array of values
 					valuearray := value.([]interface{})
@@ -107,8 +104,6 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 }
 
 func dataLookup(data interface{}, index interface{}, defaultValue interface{}) interface{} {
-	fmt.Println("data type =", reflect.TypeOf(data))
-	fmt.Println("index type", reflect.TypeOf(index))
 	switch data.(type) {
 	case map[string]interface{}:
 		switch index.(type) {
