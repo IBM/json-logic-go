@@ -74,6 +74,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 					}
 				}
 				return true
+			case "or":
+				return opOr(value, data)
 			case "var":
 				switch value.(type) {
 				case []interface{}: // An array of values
