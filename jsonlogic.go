@@ -87,7 +87,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				default: // A single value
 					return dataLookup(data, applyInterfaces(value, data), nil)
 				}
-
+			case "if":
+				return opIf(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
