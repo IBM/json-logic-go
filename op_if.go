@@ -31,13 +31,13 @@ func opIf(value interface{}, data interface{}) interface{} {
 
 		if truthy(condition) {
 			return applyInterfaces(valuearray[1], data)
-		} else {
-			if len(valuearray) > 2 {
-				return applyInterfaces(valuearray[2], data)
-			}
-
-			return nil
 		}
+
+		if len(valuearray) > 2 {
+			return opIf(valuearray[2:], data)
+		}
+
+		return nil
 
 	default: // A single value
 		return applyInterfaces(value, data)

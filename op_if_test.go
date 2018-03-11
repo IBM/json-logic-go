@@ -24,9 +24,6 @@ func TestIf(t *testing.T) {
 	result = Apply(`{ "if" : [{"==": [1, 2]}, "yes", "no"] }`)
 	assert.Equal(t, "no", result)
 
-	// result = Apply(`{ "if" : [false, "yes", {">": [2, 1]}]}`)
-	// assert.Equal(t, true, result)
-
 	result = Apply(`{ "if" : []}`)
 	assert.Equal(t, nil, result)
 
@@ -39,4 +36,21 @@ func TestIf(t *testing.T) {
 	result = Apply(`{ "if" : false}`)
 	assert.Equal(t, false, result)
 
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, 1]}]}`)
+	assert.Equal(t, true, result)
+
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, 2]}]}`)
+	assert.Equal(t, false, result)
+
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, 1]}, "yes", "no"]}`)
+	assert.Equal(t, "yes", result)
+
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, 2]}, "yes", "no"]}`)
+	assert.Equal(t, "no", result)
+
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, 2]}, "yes", true, "yes-2"]}`)
+	assert.Equal(t, "yes-2", result)
+
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, 2]}, "yes", {"!=": [1, 1]}, "yes-2", "no-2"]}`)
+	assert.Equal(t, "no-2", result)
 }
