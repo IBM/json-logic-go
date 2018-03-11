@@ -109,10 +109,8 @@ func TestAnd(t *testing.T) {
 	result = Apply(`{ "and" : [true] }`)
 	assert.Equal(t, true, result)
 
-	// TODO: Apparently this is expected behavior in javascript. But not in golang!
-	// f = StringToInterface(`{ "and" : [1, 3] }`)
-	// result = Apply(f)
-	// assert.Equal(t, 3, result)
+	result = Apply(`{ "and" : [1, 3] }`)
+	assert.Equal(t, float64(3), result)
 
 	result = Apply(`{ "and" : [3, false] }`)
 	assert.Equal(t, false, result)

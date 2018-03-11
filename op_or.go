@@ -4,10 +4,10 @@ func opOr(value interface{}, data interface{}) interface{} {
 	valuearray := value.([]interface{})
 	var lastValue interface{}
 	for _, e := range valuearray {
-		if truthy(applyInterfaces(e, data)) {
-			return e
+		lastValue = applyInterfaces(e, data)
+		if truthy(lastValue) {
+			return lastValue
 		}
-		lastValue = e
 	}
 	return lastValue
 }
