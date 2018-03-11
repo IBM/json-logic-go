@@ -43,18 +43,3 @@ func opIf(value interface{}, data interface{}) interface{} {
 		return applyInterfaces(value, data)
 	}
 }
-
-// func toBoolean(val interface{}) bool {
-// 	if val == nil {
-// 		return false
-// 	}
-
-// 	switch val.(type) {
-// 	case bool:
-// 		return val.(bool)
-// 	case string:
-// 		return len(val.(string)) > 0
-// 	default:
-// 		return false
-// 	}
-// }

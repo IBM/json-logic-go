@@ -53,4 +53,7 @@ func TestIf(t *testing.T) {
 
 	result = Apply(`{ "if" : [false, "yes", {"==": [1, 2]}, "yes", {"!=": [1, 1]}, "yes-2", "no-2"]}`)
 	assert.Equal(t, "no-2", result)
+
+	result = Apply(`{ "if" : [false, "yes", {"==": [1, {"var": "a"}]}]}`, `{"a": 1}`)
+	assert.Equal(t, true, result)
 }
