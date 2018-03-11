@@ -19,7 +19,7 @@ func opIf(value interface{}, data interface{}) interface{} {
 			return nil
 		}
 
-		condition := toBoolean(applyInterfaces(valuearray[0], data))
+		condition := truthy(applyInterfaces(valuearray[0], data))
 
 		if condition {
 			return applyInterfaces(valuearray[1], data)
@@ -32,17 +32,17 @@ func opIf(value interface{}, data interface{}) interface{} {
 	}
 }
 
-func toBoolean(val interface{}) bool {
-	if val == nil {
-		return false
-	}
+// func toBoolean(val interface{}) bool {
+// 	if val == nil {
+// 		return false
+// 	}
 
-	switch val.(type) {
-	case bool:
-		return val.(bool)
-	case string:
-		return len(val.(string)) > 0
-	default:
-		return false
-	}
-}
+// 	switch val.(type) {
+// 	case bool:
+// 		return val.(bool)
+// 	case string:
+// 		return len(val.(string)) > 0
+// 	default:
+// 		return false
+// 	}
+// }
