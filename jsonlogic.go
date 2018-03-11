@@ -67,23 +67,24 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				valuearray := value.([]interface{})
 				return applyInterfaces(valuearray[0], data) != applyInterfaces(valuearray[1], data)
 			case "and":
-				valuearray := value.([]interface{})
-				for _, e := range valuearray {
-					if applyInterfaces(e, data) == false {
-						return false
-					}
-				}
-				return true
+				return opAnd(value, data)
+			case "or":
+				return opOr(value, data)
 			case "var":
 				switch value.(type) {
 				case []interface{}: // An array of values
 					valuearray := value.([]interface{})
-					value1 := applyInterfaces(valuearray[0], data)
-					var value2 interface{}
-					if len(valuearray) > 1 {
-						value2 = applyInterfaces(valuearray[1], data)
+					if len(valuearray) > 0 {
+						value1 := applyInterfaces(valuearray[0], data)
+						var value2 interface{}
+						if len(valuearray) > 1 {
+							value2 = applyInterfaces(valuearray[1], data)
+						}
+						return dataLookup(data, value1, value2)
 					}
-					return dataLookup(data, value1, value2)
+					//TODO: Expected behavior for empty array?
+					return false
+
 				default: // A single value
 					return dataLookup(data, applyInterfaces(value, data), nil)
 				}

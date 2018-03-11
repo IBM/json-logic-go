@@ -1,7 +1,9 @@
 package jsonlogic
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -39,6 +41,8 @@ func TestAll(t *testing.T) {
 	testDataArray := testData.([]interface{})
 
 	var rule, data, expected interface{}
+	total := len(testDataArray)
+	success := 0
 
 	for _, test := range testDataArray {
 		switch test.(type) {
@@ -46,12 +50,20 @@ func TestAll(t *testing.T) {
 			rule = test.([]interface{})[0]
 			data = test.([]interface{})[1]
 			expected = test.([]interface{})[2]
-			b, _ := json.Marshal(test)
-			json := string(b[:])
-			assert.Equal(t, expected, applyInterfaces(rule, data), json)
+			b := new(bytes.Buffer)
+			enc := json.NewEncoder(b)
+			enc.SetEscapeHTML(false)
+			enc.Encode(test)
+			json := b.String()
+			ok := assert.Equal(t, expected, applyInterfaces(rule, data), json)
+			if ok {
+				success++
+			}
 		default:
 			//Skip comments
 		}
 	}
+
+	defer fmt.Println(success, "success out of", total)
 
 }
