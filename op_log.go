@@ -1,5 +1,8 @@
 package jsonlogic
 
-func opLog(value interface{}, data interface{}) interface{} {
-	return nil
+import "fmt"
+
+func opLog(value interface{}) interface{} {
+	fmt.Println(value)
+	return value
 }

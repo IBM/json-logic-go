@@ -100,7 +100,7 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 			case "cat":
 				return opCat(value, data)
 			case "log":
-				return opLog(value, data)
+				return opLog(value)
 			case "var":
 				switch value.(type) {
 				case []interface{}: // An array of values
