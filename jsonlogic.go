@@ -57,10 +57,9 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 		for operator, value := range inputmap {
 			switch operator {
 			case "===":
-				fallthrough //golang does not support '===', so It's the same as '=='. To be discussed.
+				return opEqualEqual(value, data)
 			case "==":
-				valuearray := value.([]interface{})
-				return applyInterfaces(valuearray[0], data) == applyInterfaces(valuearray[1], data)
+				return opEqual(value, data)
 			case "!==":
 				fallthrough //golang does not support '!==', so It's the same as '!='. To be discussed.
 			case "!=":
