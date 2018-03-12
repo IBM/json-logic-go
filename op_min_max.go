@@ -13,13 +13,27 @@ func opMax(value interface{}, data interface{}) interface{} {
 			return nil
 		}
 
-		result := interfaceToFloat(applyInterfaces(valuearray[0], data))
+		val := applyInterfaces(valuearray[0], data)
 
-		for _, expr := range valuearray {
-			var val = interfaceToFloat(applyInterfaces(expr, data))
+		if !isNumeric(val) {
+			return nil
+		}
 
-			if val > result {
-				result = val
+		result := interfaceToFloat(val)
+
+		var floatVal float64
+
+		for i := 1; i < len(valuearray); i++ {
+			val = applyInterfaces(valuearray[i], data)
+
+			if !isNumeric(val) {
+				return nil
+			}
+
+			floatVal = interfaceToFloat(val)
+
+			if floatVal > result {
+				result = floatVal
 			}
 		}
 
