@@ -67,7 +67,7 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				valuearray := value.([]interface{})
 				return applyInterfaces(valuearray[0], data) != applyInterfaces(valuearray[1], data)
 			case "!!":
-				return opVal(value, data)
+				return opDoubleNot(value, data)
 			case "!":
 				return opNot(value, data)
 			case "<":
@@ -92,6 +92,16 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opAnd(value, data)
 			case "or":
 				return opOr(value, data)
+			case "merge":
+				return opMerge(value, data)
+			case "in":
+				return opIn(value, data)
+			case "substr":
+				return opSubstr(value, data)
+			case "cat":
+				return opCat(value, data)
+			case "log":
+				return opLog(value, data)
 			case "var":
 				switch value.(type) {
 				case []interface{}: // An array of values
