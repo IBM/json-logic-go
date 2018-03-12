@@ -2,7 +2,13 @@ package jsonlogic
 
 func opEqual(value interface{}, data interface{}) interface{} {
 	valuearray := value.([]interface{})
-	return applyInterfaces(valuearray[0], data) == applyInterfaces(valuearray[1], data)
+	leftValue := applyInterfaces(valuearray[0], data)
+	rightValue := applyInterfaces(valuearray[1], data)
+
+	if isNumeric(leftValue) && isNumeric(rightValue) {
+		return interfaceToFloat(leftValue) == interfaceToFloat(rightValue)
+	}
+	return leftValue == rightValue
 }
 
 func opEqualEqual(value interface{}, data interface{}) interface{} {

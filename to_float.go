@@ -1,31 +1,35 @@
 package jsonlogic
 
 import (
-	"fmt"
-	"reflect"
 	"strconv"
 )
 
+//TODO: See who uses this, and consider the error handling
 func interfaceToFloat(value interface{}) float64 {
-	var val float64
-	switch value.(type) {
-	case float64:
-		val = value.(float64)
-	case int:
-		val = float64(value.(int))
-	case string:
-		tempVal, err := strconv.ParseFloat(value.(string), 64)
-		if err != nil {
-			fmt.Println("unexpected numeric value", value.(string))
-			panic(0)
+	if isNumeric(value) {
+		var val float64
+		switch value.(type) {
+		case float64:
+			val = value.(float64)
+		case int:
+			val = float64(value.(int))
+		case string:
+			val, _ = strconv.ParseFloat(value.(string), 64)
 		}
-		val = tempVal
-	case nil:
-		val = 0
-	default:
-		fmt.Println("unexpected type", reflect.TypeOf(value))
-		val = 0
+		return val
 	}
 
-	return val
+	return 0
+}
+
+func isNumeric(value interface{}) bool {
+	switch value.(type) {
+	case float32, float64, int, int8, int16, int32, int64:
+		return true
+	case string:
+		_, err := strconv.ParseFloat(value.(string), 64)
+		return err == nil
+	default:
+		return false
+	}
 }
