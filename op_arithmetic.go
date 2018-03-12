@@ -114,7 +114,7 @@ func opNot(value interface{}, data interface{}) bool {
 	}
 }
 
-func opVal(value interface{}, data interface{}) bool {
+func opDoubleNot(value interface{}, data interface{}) bool {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
