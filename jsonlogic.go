@@ -116,6 +116,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opAll(value, data)
 			case "none":
 				return opNone(value, data)
+			case "some":
+				return opSome(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
