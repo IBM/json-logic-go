@@ -1,5 +1,6 @@
 package jsonlogic
 
-func opMerge(value interface{}, data interface{}) bool {
-	return true
+func opMerge(value interface{}, data interface{}) interface{} {
+	// return true
+	return nil
 }

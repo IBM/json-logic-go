@@ -1,5 +1,5 @@
 package jsonlogic
 
-func opIn(value interface{}, data interface{}) bool {
-	return true
+func opIn(value interface{}, data interface{}) interface{} {
+	return nil
 }
