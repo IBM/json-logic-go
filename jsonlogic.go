@@ -221,6 +221,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				}
 			case "if":
 				return opIf(value, data)
+			case "all":
+				return opAll(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
