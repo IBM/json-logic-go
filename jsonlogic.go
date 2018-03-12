@@ -90,6 +90,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				}
 			case "if":
 				return opIf(value, data)
+			case "max":
+				return opMax(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
