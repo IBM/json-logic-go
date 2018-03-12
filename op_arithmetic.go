@@ -6,16 +6,16 @@ func opSum(value interface{}, data interface{}) float64 {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interFaceToFloat(applyInterfaces(value, data))
+		return interfaceToFloat(applyInterfaces(value, data))
 	}
 
-	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
 	if len(valuearray) == 2 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
 		return (val + secVal)
 	} else if len(valuearray) == 3 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
-		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
+		thirdVal := interfaceToFloat(applyInterfaces(valuearray[2], data))
 		return (val + secVal + thirdVal)
 	}
 
@@ -29,16 +29,16 @@ func opMult(value interface{}, data interface{}) float64 {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interFaceToFloat(applyInterfaces(value, data))
+		return interfaceToFloat(applyInterfaces(value, data))
 	}
 
-	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
 	if len(valuearray) == 2 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
 		return (val * secVal)
 	} else if len(valuearray) == 3 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
-		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
+		thirdVal := interfaceToFloat(applyInterfaces(valuearray[2], data))
 		return (val * secVal * thirdVal)
 	}
 
@@ -51,16 +51,16 @@ func opSub(value interface{}, data interface{}) float64 {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interFaceToFloat(applyInterfaces(value, data))
+		return interfaceToFloat(applyInterfaces(value, data))
 	}
 
-	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
 	if len(valuearray) == 2 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
 		return (val - secVal)
 	} else if len(valuearray) == 3 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
-		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
+		thirdVal := interfaceToFloat(applyInterfaces(valuearray[2], data))
 		return (val - secVal - thirdVal)
 	}
 
@@ -73,12 +73,12 @@ func opDiv(value interface{}, data interface{}) float64 {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interFaceToFloat(applyInterfaces(value, data))
+		return interfaceToFloat(applyInterfaces(value, data))
 	}
 
-	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
 	if len(valuearray) == 2 {
-		secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
 		return (val / secVal)
 	}
 
@@ -91,12 +91,12 @@ func opMod(value interface{}, data interface{}) float64 {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interFaceToFloat(applyInterfaces(value, data))
+		return interfaceToFloat(applyInterfaces(value, data))
 	}
 
-	val := int(interFaceToFloat(applyInterfaces(valuearray[0], data)))
+	val := int(interfaceToFloat(applyInterfaces(valuearray[0], data)))
 	if len(valuearray) == 2 {
-		secVal := int(interFaceToFloat(applyInterfaces(valuearray[1], data)))
+		secVal := int(interfaceToFloat(applyInterfaces(valuearray[1], data)))
 		return float64(val % secVal)
 	}
 
