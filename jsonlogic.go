@@ -57,41 +57,65 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 		for operator, value := range inputmap {
 			switch operator {
 			case "===":
-				fallthrough //golang does not support '===', so It's the same as '=='. To be discussed.
+				return opEqualStrict(value, data)
 			case "==":
-				valuearray := value.([]interface{})
-				return applyInterfaces(valuearray[0], data) == applyInterfaces(valuearray[1], data)
+				return opEqual(value, data)
 			case "!==":
-				fallthrough //golang does not support '!==', so It's the same as '!='. To be discussed.
+				return opNotEqualStrict(value, data)
 			case "!=":
-				valuearray := value.([]interface{})
-				return applyInterfaces(valuearray[0], data) != applyInterfaces(valuearray[1], data)
+				return opNotEqual(value, data)
+			case "!!":
+				return opDoubleNot(value, data)
+			case "!":
+				return opNot(value, data)
+			case "<":
+				return opSmallerThan(value, data)
+			case ">":
+				return opGreaterThan(value, data)
+			case ">=":
+				return opGreaterEqThan(value, data)
+			case "<=":
+				return opSmallerEqThan(value, data)
+			case "+":
+				return opSum(value, data)
+			case "-":
+				return opSub(value, data)
+			case "*":
+				return opMult(value, data)
+			case "/":
+				return opDiv(value, data)
+			case "%":
+				return opMod(value, data)
 			case "and":
 				return opAnd(value, data)
 			case "or":
 				return opOr(value, data)
+			case "merge":
+				return opMerge(value, data)
+			case "in":
+				return opIn(value, data)
+			case "substr":
+				return opSubstr(value, data)
+			case "cat":
+				return opCat(value, data)
+			case "log":
+				return opLog(value)
 			case "var":
-				switch value.(type) {
-				case []interface{}: // An array of values
-					valuearray := value.([]interface{})
-					if len(valuearray) > 0 {
-						value1 := applyInterfaces(valuearray[0], data)
-						var value2 interface{}
-						if len(valuearray) > 1 {
-							value2 = applyInterfaces(valuearray[1], data)
-						}
-						return dataLookup(data, value1, value2)
-					}
-					//TODO: Expected behavior for empty array?
-					return false
-
-				default: // A single value
-					return dataLookup(data, applyInterfaces(value, data), nil)
-				}
+				return opVar(value, data)
 			case "if":
 				return opIf(value, data)
-			case "max":
-				return opMax(value, data)
+            case "if":
+                return opIf(value, data)
+			case "all":
+				return opAll(value, data)
+			case "none":
+				return opNone(value, data)
+			case "some":
+				return opSome(value, data)
+			case "missing":
+				return opMissing(value, data)
+			case "missing_some":
+				return opMissingSome(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
@@ -105,30 +129,4 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 
 	return nil
 
-}
-
-func dataLookup(data interface{}, index interface{}, defaultValue interface{}) interface{} {
-	switch data.(type) {
-	case map[string]interface{}:
-		switch index.(type) {
-		case string:
-			value, ok := data.(map[string]interface{})[index.(string)]
-			if ok == true {
-				return value
-			}
-			return defaultValue
-
-		}
-	case []interface{}:
-		dataArray := data.([]interface{})
-		switch index.(type) {
-		case float64:
-			indexInt := int(index.(float64))
-			if len(dataArray) >= indexInt+1 {
-				return dataArray[indexInt]
-			}
-			return defaultValue
-		}
-	}
-	return defaultValue
 }
