@@ -30,26 +30,47 @@ func interFaceToFloat(value interface{}) float64 {
 	return val
 }
 
-func smallerThan(value interface{}, other interface{}) bool {
-	val := interFaceToFloat(value)
-	otherVal := interFaceToFloat(other)
-	return val < otherVal
+func opSmallerThan(value interface{}, data interface{}) bool {
+	valuearray := value.([]interface{})
+	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+	if len(valuearray) == 3 {
+		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		return (val < secVal) && (secVal < thirdVal)
+	}
+	return (val < secVal)
+
 }
 
-func greaterThan(value interface{}, other interface{}) bool {
-	val := interFaceToFloat(value)
-	otherVal := interFaceToFloat(other)
-	return val > otherVal
+func opGreaterThan(value interface{}, data interface{}) bool {
+	valuearray := value.([]interface{})
+	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+	if len(valuearray) == 3 {
+		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		return (val > secVal) && (secVal > thirdVal)
+	}
+	return (val > secVal)
 }
 
-func smallerEqualThan(value interface{}, other interface{}) bool {
-	val := interFaceToFloat(value)
-	otherVal := interFaceToFloat(other)
-	return val <= otherVal
+func opSmallerEqThan(value interface{}, data interface{}) bool {
+	valuearray := value.([]interface{})
+	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+	if len(valuearray) == 3 {
+		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		return (val <= secVal) && (secVal <= thirdVal)
+	}
+	return (val <= secVal)
 }
 
-func greaterEqualThan(value interface{}, other interface{}) bool {
-	val := interFaceToFloat(value)
-	otherVal := interFaceToFloat(other)
-	return val >= otherVal
+func opGreaterEqThan(value interface{}, data interface{}) bool {
+	valuearray := value.([]interface{})
+	val := interFaceToFloat(applyInterfaces(valuearray[0], data))
+	secVal := interFaceToFloat(applyInterfaces(valuearray[1], data))
+	if len(valuearray) == 3 {
+		thirdVal := interFaceToFloat(applyInterfaces(valuearray[2], data))
+		return (val >= secVal) && (secVal >= thirdVal)
+	}
+	return (val >= secVal)
 }

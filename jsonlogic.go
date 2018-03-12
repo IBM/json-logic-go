@@ -67,136 +67,27 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				valuearray := value.([]interface{})
 				return applyInterfaces(valuearray[0], data) != applyInterfaces(valuearray[1], data)
 			case "!!":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-					return truthy(applyInterfaces(valuearray[0], data))
-				default:
-					return truthy(value)
-				}
-
+				return opVal(value, data)
 			case "!":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-					return !(truthy(applyInterfaces(valuearray[0], data)))
-				default:
-					return !(truthy(value))
-				}
-
+				return opNot(value, data)
 			case "<":
-				valuearray := value.([]interface{})
-				if len(valuearray) == 3 {
-					return smallerThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)) &&
-						(smallerThan(applyInterfaces(valuearray[1], data), applyInterfaces(valuearray[2], data)))
-				}
-				return smallerThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-
+				return opSmallerThan(value, data)
 			case ">":
-				valuearray := value.([]interface{})
-				if len(valuearray) == 3 {
-					return greaterThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)) &&
-						(greaterThan(applyInterfaces(valuearray[1], data), applyInterfaces(valuearray[2], data)))
-				}
-				return greaterThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-
+				return opGreaterThan(value, data)
 			case ">=":
-				valuearray := value.([]interface{})
-				if len(valuearray) == 3 {
-					return greaterEqualThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)) &&
-						(greaterEqualThan(applyInterfaces(valuearray[1], data), applyInterfaces(valuearray[2], data)))
-				}
-				return greaterEqualThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-
+				return opGreaterEqThan(value, data)
 			case "<=":
-				valuearray := value.([]interface{})
-				if len(valuearray) == 3 {
-					return smallerEqualThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)) &&
-						(smallerEqualThan(applyInterfaces(valuearray[1], data), applyInterfaces(valuearray[2], data)))
-				}
-				return smallerEqualThan(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
+				return opSmallerEqThan(value, data)
 			case "+":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-				default:
-					return interFaceToFloat(applyInterfaces(value, data))
-				}
-
-				if len(valuearray) == 3 {
-					return sumOp(sumOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)), applyInterfaces(valuearray[2], data))
-				} else if len(valuearray) == 2 {
-					return sumOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-				} else {
-					return interFaceToFloat(applyInterfaces(valuearray[0], data))
-				}
+				return opSum(value, data)
 			case "-":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-				default:
-					return interFaceToFloat(applyInterfaces(value, data))
-				}
-
-				if len(valuearray) == 3 {
-					return subOp(subOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)), applyInterfaces(valuearray[2], data))
-				} else if len(valuearray) == 2 {
-					return subOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-				} else {
-					return interFaceToFloat(applyInterfaces(valuearray[0], data))
-				}
+				return opSub(value, data)
 			case "*":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-				default:
-					return interFaceToFloat(applyInterfaces(value, data))
-				}
-
-				if len(valuearray) == 3 {
-					return multOp(multOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)), applyInterfaces(valuearray[2], data))
-				} else if len(valuearray) == 2 {
-					return multOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-				} else {
-					return interFaceToFloat(applyInterfaces(valuearray[0], data))
-				}
+				return opMult(value, data)
 			case "/":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-				default:
-					return interFaceToFloat(applyInterfaces(value, data))
-				}
-
-				if len(valuearray) == 3 {
-					return divOp(sumOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)), applyInterfaces(valuearray[2], data))
-				} else if len(valuearray) == 2 {
-					return divOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-				} else {
-					return interFaceToFloat(applyInterfaces(valuearray[0], data))
-				}
+				return opDiv(value, data)
 			case "%":
-				var valuearray []interface{}
-				switch value.(type) {
-				case []interface{}:
-					valuearray = value.([]interface{})
-				default:
-					return interFaceToFloat(applyInterfaces(value, data))
-				}
-
-				if len(valuearray) == 3 {
-					return modOp(modOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data)), applyInterfaces(valuearray[2], data))
-				} else if len(valuearray) == 2 {
-					return modOp(applyInterfaces(valuearray[0], data), applyInterfaces(valuearray[1], data))
-				} else {
-					return interFaceToFloat(applyInterfaces(valuearray[0], data))
-				}
+				return opMod(value, data)
 			case "and":
 				return opAnd(value, data)
 			case "or":
