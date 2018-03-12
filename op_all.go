@@ -6,11 +6,12 @@ func opAll(value interface{}, data interface{}) interface{} {
 	rule := valuearray[1]
 
 	if len(inputs.([]interface{})) > 0 {
-		result := true
 		for _, input := range inputs.([]interface{}) {
-			result = result && truthy(applyInterfaces(rule, input))
+			if truthy(applyInterfaces(rule, input)) == false {
+				return false
+			}
 		}
-		return result
+		return true
 	}
 	return false
 }
