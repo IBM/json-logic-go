@@ -106,6 +106,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opIf(value, data)
 			case "max":
 				return opMax(value, data)
+			case "min":
+				return opMin(value, data)
 			case "all":
 				return opAll(value, data)
 			case "none":

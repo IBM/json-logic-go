@@ -25,3 +25,23 @@ func TestMax(t *testing.T) {
 	assert.Equal(t, nil, result)
 
 }
+
+func TestMin(t *testing.T) {
+	var result interface{}
+
+	result = Apply(`{ "min" : [1,2] }`)
+	assert.Equal(t, float64(1), result)
+
+	result = Apply(`{"min":[1,2,3]}`)
+	assert.Equal(t, float64(1), result)
+
+	result = Apply(`{"min":[]}`)
+	assert.Equal(t, nil, result)
+
+	result = Apply(`{"min":["1"]}`)
+	assert.Equal(t, float64(1), result)
+
+	result = Apply(`{"min":["notnumber"]}`)
+	assert.Equal(t, nil, result)
+
+}
