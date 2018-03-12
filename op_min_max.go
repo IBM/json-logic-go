@@ -1,7 +1,5 @@
 package jsonlogic
 
-import "math"
-
 func opMax(value interface{}, data interface{}) interface{} {
 	if value == nil {
 		return 0
@@ -15,12 +13,14 @@ func opMax(value interface{}, data interface{}) interface{} {
 			return nil
 		}
 
-		result := applyInterfaces(valuearray[0], data).(float64)
+		result := interfaceToFloat(applyInterfaces(valuearray[0], data))
 
-		for expr := range valuearray {
-			var val = applyInterfaces(expr, data)
+		for _, expr := range valuearray {
+			var val = interfaceToFloat(applyInterfaces(expr, data))
 
-			result = math.Max(result, val.(float64))
+			if val > result {
+				result = val
+			}
 		}
 
 		return result

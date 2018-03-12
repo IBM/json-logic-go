@@ -104,8 +104,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opVar(value, data)
 			case "if", "?:": // "?:" is an undocumented alias of 'if'
 				return opIf(value, data)
-			// case "max":
-			// 	return opMax(value, data)
+			case "max":
+				return opMax(value, data)
 			case "all":
 				return opAll(value, data)
 			case "none":
