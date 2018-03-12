@@ -112,6 +112,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				}
 			case "if":
 				return opIf(value, data)
+			case "all":
+				return opAll(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
@@ -125,30 +127,4 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 
 	return nil
 
-}
-
-func dataLookup(data interface{}, index interface{}, defaultValue interface{}) interface{} {
-	switch data.(type) {
-	case map[string]interface{}:
-		switch index.(type) {
-		case string:
-			value, ok := data.(map[string]interface{})[index.(string)]
-			if ok == true {
-				return value
-			}
-			return defaultValue
-
-		}
-	case []interface{}:
-		dataArray := data.([]interface{})
-		switch index.(type) {
-		case float64:
-			indexInt := int(index.(float64))
-			if len(dataArray) >= indexInt+1 {
-				return dataArray[indexInt]
-			}
-			return defaultValue
-		}
-	}
-	return defaultValue
 }
