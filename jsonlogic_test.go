@@ -111,7 +111,7 @@ func TestMap(t *testing.T) {
 	var result interface{}
 
 	result = Apply(`{"map":[[1,2,3,4,5],{"*":[{"var":""},2]}]}`)
-	assert.Equal(t, []float64{2, 4, 6, 8, 10}, result)
+	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
 }
 
 func TestIf(t *testing.T) {
