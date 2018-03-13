@@ -5,58 +5,49 @@ import (
 )
 
 func dataLookup(data interface{}, index interface{}, defaultValue interface{}) interface{} {
-	switch data.(type) {
-	case map[string]interface{}:
-		switch index.(type) {
-		case string:
-			indexString := index.(string)
-			if strings.ContainsRune(indexString, '.') {
-				currentData := data
-				var value interface{} = defaultValue
-				var ok bool
-				for _, e := range strings.Split(indexString, ".") {
-					value, ok = currentData.(map[string]interface{})[e]
-					if ok == true {
-						switch value.(type) {
-						case map[string]interface{}:
-							currentData = value
-						}
-					}
-				}
-				return value
+	if index == nil { //Special case.
+		return data
+	}
+
+	switch index.(type) {
+	case string:
+		if strings.ContainsRune(index.(string), '.') {
+			// Handle dot-notation
+			indexArray := strings.Split(index.(string), ".")
+			if len(indexArray) > 1 { //TODO: What would "a." mean?
+				firstIndex, indexArray := indexArray[0], indexArray[1:]
+				retrievedValue := dataLookup(data, firstIndex, defaultValue)
+				return dataLookup(retrievedValue, strings.Join(indexArray, "."), defaultValue)
 			}
 
-			value, ok := data.(map[string]interface{})[indexString]
+		} else if len(index.(string)) == 0 {
+			// Special case. See "all", "some", "none"
+			return data
+		} else if isNumeric(index) {
+			// Go to numeric/array
+			return dataLookup(data, interfaceToFloat(index), defaultValue)
+		}
+		// Regular mapping
+		switch data.(type) {
+		case map[string]interface{}:
+			value, ok := data.(map[string]interface{})[index.(string)]
 			if ok == true {
 				return value
 			}
-
-			return defaultValue
-
 		}
-	case []interface{}:
-		dataArray := data.([]interface{})
-		switch index.(type) {
-		case float64:
+
+	case float64:
+		// Array index
+		switch data.(type) {
+		case []interface{}:
+			dataArray := data.([]interface{})
 			indexInt := int(index.(float64))
 			if len(dataArray) >= indexInt+1 {
 				return dataArray[indexInt]
 			}
-			return defaultValue
-		case string:
-			if isNumeric(index) {
-				indexInt := int(interfaceToFloat(index))
-				if len(dataArray) >= indexInt+1 {
-					return dataArray[indexInt]
-				}
-				return defaultValue
-			}
 		}
-	case float64: //See "all", "some", "none"
-		if index == "" {
-			return data
-		}
-		return defaultValue
+
 	}
 	return defaultValue
+
 }
