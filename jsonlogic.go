@@ -124,7 +124,7 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opFilter(value, data)
 			default:
 				if res, err := opCustom(operator, value, data); err != nil {
-					fmt.Printf("Error: %s", err)
+					log.Printf("Error: %s", err)
 					return nil
 				} else {
 					return res
