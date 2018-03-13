@@ -119,8 +119,12 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 			case "missing_some":
 				return opMissingSome(value, data)
 			default:
-				fmt.Println("unrecognized operator", operator)
-				return nil
+				if res, err := opCustom(operator, value, data); err != nil {
+					fmt.Printf("Error: %s", err)
+					return nil
+				} else {
+					return res
+				}
 			}
 		}
 		break
