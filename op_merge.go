@@ -9,16 +9,17 @@ func opMerge(value interface{}, data interface{}) []interface{} {
 			result = value.([]interface{})
 		}
 		for _, val := range valuearray {
-			switch val.(type) {
+			processedValue := applyInterfaces(val, data)
+			switch processedValue.(type) {
 			case []interface{}:
-				result = append(result, opMerge(val, data)...)
+				result = append(result, opMerge(processedValue, data)...)
 			case interface{}:
-				result = append(result, val)
+				result = append(result, processedValue)
 			}
 		}
 	default:
 		if value != nil {
-			result = append(result, value)
+			result = append(result, applyInterfaces(value, data))
 		}
 	}
 

@@ -12,8 +12,8 @@ func opVar(value interface{}, data interface{}) interface{} {
 			}
 			return dataLookup(data, value1, value2)
 		}
-		//TODO: Expected behavior for empty array?
-		return false
+		//Expected behavior for empty array is to return the entire data
+		return data
 
 	default: // A single value
 		return dataLookup(data, applyInterfaces(value, data), nil)
