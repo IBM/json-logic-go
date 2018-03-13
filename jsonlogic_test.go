@@ -61,15 +61,15 @@ func TestCompound(t *testing.T) {
 	rule := map[string]interface{}{
 		"and": []interface{}{
 			map[string]interface{}{
-				"==": []float64{1, 1},
+				"==": []interface{}{1, 1},
 			},
 			map[string]interface{}{
 				"and": []interface{}{
 					map[string]interface{}{
-						"==": []float64{1, 1},
+						"==": []interface{}{1, 1},
 					},
 					map[string]interface{}{
-						"==": []float64{2, 1},
+						"==": []interface{}{2, 1},
 					},
 				},
 			},
