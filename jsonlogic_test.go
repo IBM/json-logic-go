@@ -58,6 +58,26 @@ func TestCompound(t *testing.T) {
 	result = Apply(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,1]}]}]}`)
 	assert.Equal(t, false, result)
 
+	rule := map[string]interface{}{
+		"and": []interface{}{
+			map[string]interface{}{
+				"==": []float64{1, 1},
+			},
+			map[string]interface{}{
+				"and": []interface{}{
+					map[string]interface{}{
+						"==": []float64{1, 1},
+					},
+					map[string]interface{}{
+						"==": []float64{2, 1},
+					},
+				},
+			},
+		},
+	}
+	result = Apply(rule)
+	assert.Equal(t, false, result)
+
 }
 
 func TestVar(t *testing.T) {
