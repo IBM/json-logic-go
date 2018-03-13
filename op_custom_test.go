@@ -26,4 +26,8 @@ func TestAddOperation(t *testing.T) {
 	AddOperation("add", add)
 	result = Apply(`{"add": [1, 2]}`)
 	assert.Equal(t, float64(3), result)
+
+	result = Apply(`{"add": [{"if": [true, -1, 1]}, 2]}`)
+	assert.Equal(t, float64(1), result)
+
 }

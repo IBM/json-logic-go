@@ -10,14 +10,17 @@ var operations map[string]operation = make(map[string]operation)
 
 func opCustom(opName string, arg interface{}, data interface{}) (interface{}, error) {
 	if op, ok := operations[opName]; ok {
-		argValue := applyInterfaces(arg, data)
-
-		switch argValue.(type) {
+		switch arg.(type) {
 		case []interface{}:
-			return op(argValue.([]interface{})...), nil
+			argValues := make([]interface{}, len(arg.([]interface{})))
+			for i, argExpr := range arg.([]interface{}) {
+				argValues[i] = applyInterfaces(argExpr, data)
+			}
+			return op(argValues...), nil
 		default:
-			return op(argValue), nil
+			return (op(applyInterfaces(arg, data))), nil
 		}
+
 	}
 
 	return nil, fmt.Errorf("Unknown uperation: %s", opName)
