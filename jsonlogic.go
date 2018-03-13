@@ -2,7 +2,7 @@ package jsonlogic
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 )
 
 // stringToInterface converts a string json to an interface{}
@@ -12,7 +12,7 @@ func stringToInterface(input string) interface{} {
 	err := json.Unmarshal(b, &f)
 
 	if err != nil {
-		fmt.Println("Unmarshal warning:", err)
+		log.Println("Unmarshal warning:", err)
 		// The API supports sending just plain string. How to differentiate between an invalid json and a plain string?
 		return input
 	}
@@ -123,7 +123,7 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 			case "filter":
 				return opFilter(value, data)
 			default:
-				fmt.Println("unrecognized operator", operator)
+				log.Print("unrecognized operator", operator)
 				return nil
 			}
 		}

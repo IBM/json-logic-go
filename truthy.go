@@ -1,7 +1,7 @@
 package jsonlogic
 
 import (
-	"fmt"
+	"log"
 	"reflect"
 )
 
@@ -22,7 +22,7 @@ func truthy(input interface{}) bool {
 	case nil:
 		return false
 	default:
-		fmt.Println("truthy unpexted type", reflect.TypeOf(input))
+		log.Println("truthy unexpected type", reflect.TypeOf(input))
 		return false
 	}
 }
