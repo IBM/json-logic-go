@@ -123,7 +123,7 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 			case "filter":
 				return opFilter(value, data)
 			default:
-				log.Print("unrecognized operator", operator)
+				log.Println("unrecognized operator", operator)
 				return nil
 			}
 		}
