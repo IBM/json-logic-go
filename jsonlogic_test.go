@@ -169,6 +169,19 @@ func TestIf(t *testing.T) {
 	assert.Equal(t, float64(1), result)
 }
 
+func TestCat(t *testing.T) {
+	var result interface{}
+
+	result = Apply(`{ "cat" : ["Hello, ",{"var":""}] }`, `Dolly`)
+	assert.Equal(t, `Hello, Dolly`, result)
+
+	result = Apply(`{ "cat" : [{"var":""}] }`, `Dolly`)
+	assert.Equal(t, `Dolly`, result)
+
+	result = Apply(`{ "cat" : {"var":""} }`, `Dolly`)
+	assert.Equal(t, `Dolly`, result)
+}
+
 // Helper function
 func getJSON(url string, target interface{}) {
 	var client = http.Client{Timeout: 100 * time.Second}
