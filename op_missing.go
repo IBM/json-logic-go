@@ -2,10 +2,11 @@ package jsonlogic
 
 func opMissing(value interface{}, data interface{}) interface{} {
 	var resultArray = []interface{}{}
+	processedValue := applyInterfaces(value, data)
 
-	switch value.(type) {
+	switch processedValue.(type) {
 	case []interface{}:
-		valuearray := value.([]interface{})
+		valuearray := processedValue.([]interface{})
 
 		for _, e := range valuearray {
 			if dataLookup(data, e, nil) == nil {
@@ -14,8 +15,8 @@ func opMissing(value interface{}, data interface{}) interface{} {
 		}
 
 	default: //single value
-		if dataLookup(data, value, nil) == nil {
-			resultArray = append(resultArray, value)
+		if dataLookup(data, processedValue, nil) == nil {
+			resultArray = append(resultArray, processedValue)
 		}
 	}
 	return resultArray
