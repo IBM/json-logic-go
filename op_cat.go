@@ -23,7 +23,7 @@ func opCat(value interface{}, data interface{}) string {
 		}
 	default:
 		if value != nil {
-			result = value.(string)
+			result = applyInterfaces(value, data).(string)
 		}
 	}
 	return result
