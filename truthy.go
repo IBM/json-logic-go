@@ -23,6 +23,6 @@ func truthy(input interface{}) bool {
 		return false
 	default:
 		log.Println("truthy unexpected type", reflect.TypeOf(input))
-		return false
+		return true
 	}
 }

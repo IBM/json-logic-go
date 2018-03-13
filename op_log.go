@@ -1,8 +1,8 @@
 package jsonlogic
 
-import "fmt"
+import "log"
 
 func opLog(value interface{}) interface{} {
-	fmt.Println(value)
+	log.Println(value)
 	return value
 }
