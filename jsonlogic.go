@@ -98,6 +98,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opSubstr(value, data)
 			case "cat":
 				return opCat(value, data)
+			case "map":
+				return opMap(value, data)
 			case "log":
 				return opLog(value)
 			case "var":
@@ -118,6 +120,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opMissing(value, data)
 			case "missing_some":
 				return opMissingSome(value, data)
+			case "filter":
+				return opFilter(value, data)
 			default:
 				fmt.Println("unrecognized operator", operator)
 				return nil
