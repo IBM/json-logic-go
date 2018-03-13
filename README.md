@@ -16,6 +16,6 @@ The first input is the json rule, as a string:
 
 The second input, optional, is the data source:
 
-``jsonLogic.apply(`{ "var" : ["a"] }`, `{ a : 1, b: 2 }`);``
+``Apply(`{ "var" : ["a"] }`, `{ a : 1, b: 2 }`);``
 
 The return value is of type `interface{}` because it can be anything such as a string, boolean, map, array, etc
