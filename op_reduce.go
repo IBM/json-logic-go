@@ -1,11 +1,11 @@
 package jsonlogic
 
-func opReduce(value interface{}, data interface{}) float64 {
+func opReduce(value interface{}, data interface{}) interface{} {
 
 	valuearray := value.([]interface{})
 	array := applyInterfaces(valuearray[0], data)
 	operation := valuearray[1]
-	accumulator := valuearray[2].(float64)
+	accumulator := valuearray[2]
 
 	if array == nil {
 		return accumulator
@@ -17,7 +17,7 @@ func opReduce(value interface{}, data interface{}) float64 {
 		// "accumulator" : progress so far, or the initial value
 		dat["current"] = val
 		dat["accumulator"] = accumulator
-		accumulator = applyInterfaces(operation, dat).(float64)
+		accumulator = applyInterfaces(operation, dat)
 	}
 
 	return accumulator
