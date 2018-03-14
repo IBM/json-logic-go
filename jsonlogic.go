@@ -134,6 +134,8 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 				return opMissingSome(value, data)
 			case "filter":
 				return opFilter(value, data)
+			case "reduce":
+				return opReduce(value, data)
 			default:
 				if res, err := opCustom(operator, value, data); err != nil {
 					log.Printf("Error: %s", err)
