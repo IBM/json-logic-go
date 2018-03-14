@@ -41,6 +41,7 @@ func TestRemote(t *testing.T) {
 			}
 		default:
 			//Skip comments
+			total--
 		}
 	}
 
