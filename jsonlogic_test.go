@@ -206,6 +206,22 @@ func TestCat(t *testing.T) {
 	assert.Equal(t, `Dolly`, result)
 }
 
+func TestReduce(t *testing.T) {
+	var result interface{}
+	result = Apply(`{"reduce":[[true, true, true],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
+	assert.Equal(t, true, result)
+
+	result = Apply(`{"reduce":[[true, true, false],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
+	assert.Equal(t, false, result)
+
+	result = Apply(`{"reduce":[
+		[50, 100, 150],
+	   {"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]},
+	   0
+	]}`)
+	assert.Equal(t, float64(300), result)
+}
+
 // Helper function
 func getJSON(url string, target interface{}) {
 	var client = http.Client{Timeout: 100 * time.Second}
