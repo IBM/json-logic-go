@@ -220,6 +220,27 @@ func TestReduce(t *testing.T) {
 	   0
 	]}`)
 	assert.Equal(t, float64(300), result)
+
+	// From the jsonlogic doc:
+	// Note, that inside the logic being used to reduce, var operations only have access to an object like:
+	// {
+	// 	"current" : // this element of the array,
+	// 	"accumulator" : // progress so far, or the initial value
+	// }
+	//
+	// This rule should evaluate to nil because var operation does not comply with this constraint
+	result = Apply(`{
+		"reduce": [
+			[1,2,3,4],
+			{"+": [{"var": "a"}, {"var": "b"}]},
+			0
+		]
+		}`,
+		`{
+		"a": 100, 
+		"b": 1000
+	}`)
+	assert.Equal(t, nil, result)
 }
 
 // Helper function
