@@ -1,3 +1,4 @@
+[![Build Status](https://travis.ibm.com/NATHANH/json-logic-go.svg?token=DxTFrpuyhWKJNXaj5cp2&branch=master)](https://travis.ibm.com/NATHANH/json-logic-go)
 # json-logic-go
 
 This parser accepts [JsonLogic](http://jsonlogic.com/) rules and executes them in Go.
