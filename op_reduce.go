@@ -2,6 +2,7 @@ package jsonlogic
 
 import (
 	"fmt"
+	"strings"
 )
 
 func opReduce(value interface{}, data interface{}) (interface{}, error) {
@@ -13,8 +14,7 @@ func opReduce(value interface{}, data interface{}) (interface{}, error) {
 	operation := valuearray[1]
 	accumulator := valuearray[2]
 
-	//TODO : support dot notation in current variable
-	err = parseOperation(operation)
+	err = checkReduceVariables(operation)
 	if err != nil {
 		return nil, err
 	}
@@ -38,25 +38,28 @@ func opReduce(value interface{}, data interface{}) (interface{}, error) {
 	return accumulator, nil
 }
 
-func parseOperation(operation interface{}) error {
+func checkReduceVariables(operation interface{}) error {
 	switch operation.(type) {
 	case map[string]interface{}:
 		for key, variable := range operation.(map[string]interface{}) {
 			switch variable.(type) {
 			case string:
+				if key == "var" && strings.HasPrefix(variable.(string), "current.") {
+					continue
+				}
 				if key == "var" && variable != "current" && variable != "accumulator" {
 					return fmt.Errorf("Error: wrong variable for reduce operator : %s", variable)
 				}
 			default:
-				if parseOperation(variable) != nil {
-					return parseOperation(variable)
+				if checkReduceVariables(variable) != nil {
+					return checkReduceVariables(variable)
 				}
 			}
 		}
 	case []interface{}:
 		for _, variable := range operation.([]interface{}) {
-			if parseOperation(variable) != nil {
-				return parseOperation(variable)
+			if checkReduceVariables(variable) != nil {
+				return checkReduceVariables(variable)
 			}
 
 		}

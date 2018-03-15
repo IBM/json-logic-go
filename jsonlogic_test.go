@@ -237,6 +237,11 @@ func TestReduce(t *testing.T) {
 		"b": 1000
 	}`)
 	assert.Equal(t, float64(80), result)
+
+	result, _ = Apply(`{
+		"reduce":[{"var":"desserts"},{"+":[{"var":"accumulator"},{"var":"current.wrong"}]},0]}`,
+		`{"desserts":[{"name":"apple","qty":1},{"name":"brownie","qty":2},{"name":"cupcake","qty":3}]}`)
+	assert.Equal(t, nil, result)
 }
 
 // Helper function
