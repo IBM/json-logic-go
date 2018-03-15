@@ -21,28 +21,18 @@ func stringToInterface(input string) interface{} {
 }
 
 // Apply takes in a string rule and an optional string data and applies its logic
-func Apply(inputs ...interface{}) interface{} {
+func Apply(inputs ...string) interface{} {
 	var rule, data interface{}
 	if len(inputs) < 1 {
 		//TODO: Expected behavior with no params?
 		return nil
 	}
 
-	switch inputs[0].(type) {
-	case string:
-		rule = stringToInterface(inputs[0].(string))
-	default:
-		rule = inputs[0]
-	}
+	rule = stringToInterface(inputs[0])
 
 	if len(inputs) > 1 {
 		//We have data inputs
-		switch inputs[1].(type) {
-		case string:
-			data = stringToInterface(inputs[1].(string))
-		default:
-			data = inputs[1]
-		}
+		data = stringToInterface(inputs[1])
 	}
 
 	return applyInterfaces(rule, data)
