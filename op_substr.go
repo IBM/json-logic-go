@@ -1,13 +1,19 @@
 package jsonlogic
 
-func opSubstr(value interface{}, data interface{}) string {
+import "fmt"
+
+func opSubstr(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	var subString interface{}
+	var err error
 	switch valuearray[0].(type) {
 	case string:
 		subString = valuearray[0].(string)
 	default:
-		subString = applyInterfaces(valuearray[0], data)
+		subString, err = applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
 	}
 
 	firstIndex := int(valuearray[1].(float64))
@@ -18,10 +24,10 @@ func opSubstr(value interface{}, data interface{}) string {
 		secIndex := int(valuearray[2].(float64))
 		if secIndex < 0 {
 			secIndex = len(subString.(string)) + secIndex
-			return subString.(string)[firstIndex:secIndex]
+			return subString.(string)[firstIndex:secIndex], nil
 		}
-		return subString.(string)[firstIndex : firstIndex+secIndex]
+		return subString.(string)[firstIndex : firstIndex+secIndex], nil
 	}
-	return subString.(string)[firstIndex:]
+	return subString.(string)[firstIndex:], nil
 
 }

@@ -1,7 +1,14 @@
 package jsonlogic
 
-func opMissingSome(value interface{}, data interface{}) interface{} {
-	processedValue := applyInterfaces(value, data)
+import (
+	"fmt"
+)
+
+func opMissingSome(value interface{}, data interface{}) (interface{}, error) {
+	processedValue, err := applyInterfaces(value, data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
 	valuearray := processedValue.([]interface{})
 	targetCount := int(valuearray[0].(float64))
 	found := 0
@@ -30,8 +37,8 @@ func opMissingSome(value interface{}, data interface{}) interface{} {
 	}
 
 	if found < targetCount {
-		return resultArray
+		return resultArray, nil
 	}
-	return []interface{}{}
+	return []interface{}{}, nil
 
 }

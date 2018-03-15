@@ -20,14 +20,14 @@ func TestAddOperation(t *testing.T) {
 	err := AddOperation("myOp", myOp)
 	assert.NoError(t, err)
 
-	result := Apply(`{"myOp": "jsonlogic"}`)
+	result, _ := Apply(`{"myOp": "jsonlogic"}`)
 	assert.Equal(t, "Hi jsonlogic!", result)
 
 	AddOperation("add", add)
-	result = Apply(`{"add": [1, 2]}`)
+	result, _ = Apply(`{"add": [1, 2]}`)
 	assert.Equal(t, float64(3), result)
 
-	result = Apply(`{"add": [{"if": [true, -1, 1]}, 2]}`)
+	result, _ = Apply(`{"add": [{"if": [true, -1, 1]}, 2]}`)
 	assert.Equal(t, float64(1), result)
 
 }

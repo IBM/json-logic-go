@@ -1,5 +1,7 @@
 package jsonlogic
 
+import "fmt"
+
 // The if statement typically takes 3 arguments: a condition (if), what to do if it’s true (then), and what to do if it’s false (else), like:
 // {"if" : [ true, "yes", "no" ]}
 //
@@ -10,9 +12,9 @@ package jsonlogic
 // 	"gas"
 // ]}
 
-func opIf(value interface{}, data interface{}) interface{} {
+func opIf(value interface{}, data interface{}) (interface{}, error) {
 	if value == nil {
-		return nil
+		return nil, nil
 	}
 
 	switch value.(type) {
@@ -20,26 +22,37 @@ func opIf(value interface{}, data interface{}) interface{} {
 		valuearray := value.([]interface{})
 
 		if len(valuearray) == 0 {
-			return nil
+			return nil, nil
 		}
 
-		condition := applyInterfaces(valuearray[0], data)
+		condition, err := applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
 
 		if len(valuearray) == 1 {
-			return condition
+			return condition, nil
 		}
 
 		if truthy(condition) {
-			return applyInterfaces(valuearray[1], data)
+			res, err := applyInterfaces(valuearray[1], data)
+			if err != nil {
+				return nil, fmt.Errorf("error")
+			}
+			return res, nil
 		}
 
 		if len(valuearray) > 2 {
 			return opIf(valuearray[2:], data)
 		}
 
-		return nil
+		return nil, nil
 
 	default: // A single value
-		return applyInterfaces(value, data)
+		res, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return res, nil
 	}
 }

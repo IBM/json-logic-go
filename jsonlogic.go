@@ -2,6 +2,7 @@ package jsonlogic
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -21,11 +22,11 @@ func stringToInterface(input string) interface{} {
 }
 
 // Apply takes in a string rule and an optional string data and applies its logic
-func Apply(inputs ...string) interface{} {
+func Apply(inputs ...string) (interface{}, error) {
 	var rule, data interface{}
 	if len(inputs) < 1 {
 		//TODO: Expected behavior with no params?
-		return nil
+		return nil, nil
 	}
 
 	rule = stringToInterface(inputs[0])
@@ -39,11 +40,11 @@ func Apply(inputs ...string) interface{} {
 }
 
 // applyInterfaces takes in an interface{} and an optional interface{} data set and applies its logic
-func applyInterfaces(inputs ...interface{}) interface{} {
+func applyInterfaces(inputs ...interface{}) (interface{}, error) {
 	var rule, data interface{}
 	if len(inputs) < 1 {
 		//TODO: Expected behavior with no params?
-		return nil
+		return nil, nil
 	}
 	rule = inputs[0]
 	if len(inputs) > 1 {
@@ -129,18 +130,18 @@ func applyInterfaces(inputs ...interface{}) interface{} {
 			default:
 				if res, err := opCustom(operator, value, data); err != nil {
 					log.Printf("Error: %s", err)
-					return nil
+					return nil, fmt.Errorf("Error: %s", err)
 				} else {
-					return res
+					return res, nil
 				}
 			}
 		}
 		break
 	default:
 		//Non-rule
-		return rule
+		return rule, nil
 	}
 
-	return nil
+	return nil, nil
 
 }

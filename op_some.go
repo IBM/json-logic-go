@@ -1,17 +1,26 @@
 package jsonlogic
 
-func opSome(value interface{}, data interface{}) interface{} {
+import "fmt"
+
+func opSome(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	inputs := applyInterfaces(valuearray[0], data)
+	inputs, err := applyInterfaces(valuearray[0], data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
 	rule := valuearray[1]
 
 	if len(inputs.([]interface{})) > 0 {
 		for _, input := range inputs.([]interface{}) {
-			if truthy(applyInterfaces(rule, input)) {
-				return true
+			res, err := applyInterfaces(rule, input)
+			if err != nil {
+				return nil, fmt.Errorf("error")
+			}
+			if truthy(res) {
+				return true, nil
 			}
 		}
-		return false
+		return false, nil
 	}
-	return false
+	return false, nil
 }

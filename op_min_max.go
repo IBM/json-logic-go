@@ -1,15 +1,17 @@
 package jsonlogic
 
-func opMax(value interface{}, data interface{}) interface{} {
+import "fmt"
+
+func opMax(value interface{}, data interface{}) (interface{}, error) {
 	_, max := findMinMax(value, data)
 
-	return max
+	return max, nil
 }
 
-func opMin(value interface{}, data interface{}) interface{} {
+func opMin(value interface{}, data interface{}) (interface{}, error) {
 	min, _ := findMinMax(value, data)
 
-	return min
+	return min, nil
 }
 
 func findMinMax(value interface{}, data interface{}) (min interface{}, max interface{}) {
@@ -25,8 +27,10 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 			return nil, nil
 		}
 
-		val := applyInterfaces(valuearray[0], data)
-
+		val, err := applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
 		if !isNumeric(val) {
 			return nil, nil
 		}
@@ -37,8 +41,10 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 		var floatVal float64
 
 		for i := 1; i < len(valuearray); i++ {
-			val = applyInterfaces(valuearray[i], data)
-
+			val, err = applyInterfaces(valuearray[i], data)
+			if err != nil {
+				return nil, fmt.Errorf("error")
+			}
 			if !isNumeric(val) {
 				return nil, nil
 			}
@@ -55,8 +61,10 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 		return min, max
 
 	default: // A single value
-		val := applyInterfaces(value, data)
-
+		val, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
 		if !isNumeric(val) {
 			return nil, nil
 		}

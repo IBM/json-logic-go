@@ -1,14 +1,19 @@
 package jsonlogic
 
-func opReduce(value interface{}, data interface{}) interface{} {
+import "fmt"
+
+func opReduce(value interface{}, data interface{}) (interface{}, error) {
 
 	valuearray := value.([]interface{})
-	array := applyInterfaces(valuearray[0], data)
+	array, err := applyInterfaces(valuearray[0], data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
 	operation := valuearray[1]
 	accumulator := valuearray[2]
 
 	if array == nil {
-		return accumulator
+		return accumulator, nil
 	}
 
 	var dat = map[string]interface{}{}
@@ -17,8 +22,12 @@ func opReduce(value interface{}, data interface{}) interface{} {
 		// "accumulator" : progress so far, or the initial value
 		dat["current"] = val
 		dat["accumulator"] = accumulator
-		accumulator = applyInterfaces(operation, dat)
+		accumulator, err = applyInterfaces(operation, dat)
+		fmt.Println("accum", accumulator)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
 	}
 
-	return accumulator
+	return accumulator, nil
 }

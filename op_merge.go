@@ -1,6 +1,8 @@
 package jsonlogic
 
-func opMerge(value interface{}, data interface{}) []interface{} {
+import "fmt"
+
+func opMerge(value interface{}, data interface{}) ([]interface{}, error) {
 	var result []interface{}
 	switch value.(type) {
 	case []interface{}:
@@ -9,19 +11,30 @@ func opMerge(value interface{}, data interface{}) []interface{} {
 			result = value.([]interface{})
 		}
 		for _, val := range valuearray {
-			processedValue := applyInterfaces(val, data)
+			processedValue, err := applyInterfaces(val, data)
+			if err != nil {
+				return nil, fmt.Errorf("error")
+			}
 			switch processedValue.(type) {
 			case []interface{}:
-				result = append(result, opMerge(processedValue, data)...)
+				res, err := opMerge(processedValue, data)
+				if err != nil {
+					return nil, fmt.Errorf("error")
+				}
+				result = append(result, res...)
 			case interface{}:
 				result = append(result, processedValue)
 			}
 		}
 	default:
 		if value != nil {
-			result = append(result, applyInterfaces(value, data))
+			res, err := applyInterfaces(value, data)
+			if err != nil {
+				return nil, fmt.Errorf("error")
+			}
+			result = append(result, res)
 		}
 	}
 
-	return result
+	return result, nil
 }

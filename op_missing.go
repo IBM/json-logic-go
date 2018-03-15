@@ -1,8 +1,15 @@
 package jsonlogic
 
-func opMissing(value interface{}, data interface{}) interface{} {
+import (
+	"fmt"
+)
+
+func opMissing(value interface{}, data interface{}) (interface{}, error) {
 	var resultArray = []interface{}{}
-	processedValue := applyInterfaces(value, data)
+	processedValue, err := applyInterfaces(value, data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
 
 	switch processedValue.(type) {
 	case []interface{}:
@@ -19,6 +26,6 @@ func opMissing(value interface{}, data interface{}) interface{} {
 			resultArray = append(resultArray, processedValue)
 		}
 	}
-	return resultArray
+	return resultArray, nil
 
 }

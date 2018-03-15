@@ -1,10 +1,11 @@
 package jsonlogic
 
 import (
+	"fmt"
 	"strconv"
 )
 
-func opCat(value interface{}, data interface{}) string {
+func opCat(value interface{}, data interface{}) (interface{}, error) {
 	var result string
 	switch value.(type) {
 	case []interface{}:
@@ -18,14 +19,22 @@ func opCat(value interface{}, data interface{}) string {
 			case float64:
 				result += strconv.Itoa((int(val.(float64))))
 			default:
-				result += applyInterfaces(val, data).(string)
+				res, err := applyInterfaces(val, data)
+				if err != nil {
+					return nil, fmt.Errorf("error")
+				}
+				result += res.(string)
 			}
 		}
 	default:
 		if value != nil {
-			result = applyInterfaces(value, data).(string)
+			res, err := applyInterfaces(value, data)
+			if err != nil {
+				return nil, fmt.Errorf("error")
+			}
+			result = res.(string)
 		}
 	}
-	return result
+	return result, nil
 
 }

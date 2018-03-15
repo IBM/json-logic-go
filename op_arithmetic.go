@@ -1,126 +1,224 @@
 package jsonlogic
 
-func opSum(value interface{}, data interface{}) float64 {
+import "fmt"
+
+func opSum(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interfaceToFloat(applyInterfaces(value, data))
+		values, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return interfaceToFloat(values), nil
 	}
-
-	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
+	lastValue, err := applyInterfaces(valuearray[0], data)
+	val := interfaceToFloat(lastValue)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
 	if len(valuearray) == 2 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		return (val + secVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+
+		return (val + secVal), nil
+
 	} else if len(valuearray) == 3 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		thirdVal := interfaceToFloat(applyInterfaces(valuearray[2], data))
-		return (val + secVal + thirdVal)
+		// sec value
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+
+		// third value
+		thirdValue, err := applyInterfaces(valuearray[2], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		thirdVal := interfaceToFloat(thirdValue)
+
+		return (val + secVal + thirdVal), nil
 	}
 
-	return val
+	return val, nil
 
 }
 
-func opMult(value interface{}, data interface{}) float64 {
+func opMult(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interfaceToFloat(applyInterfaces(value, data))
+		values, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return interfaceToFloat(values), nil
 	}
 
-	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
+	firstValue, err := applyInterfaces(valuearray[0], data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
+	val := interfaceToFloat(firstValue)
 	if len(valuearray) == 2 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		return (val * secVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+		return (val * secVal), nil
 	} else if len(valuearray) == 3 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		thirdVal := interfaceToFloat(applyInterfaces(valuearray[2], data))
-		return (val * secVal * thirdVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+		thirdValue, err := applyInterfaces(valuearray[2], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		thirdVal := interfaceToFloat(thirdValue)
+		return (val * secVal * thirdVal), nil
 	}
 
-	return val
+	return val, nil
 }
 
-func opSub(value interface{}, data interface{}) float64 {
+func opSub(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interfaceToFloat(applyInterfaces(value, data))
+		values, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return interfaceToFloat(values), nil
 	}
-
-	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
+	firstValue, err := applyInterfaces(valuearray[0], data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
+	val := interfaceToFloat(firstValue)
 	if len(valuearray) == 2 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		return (val - secVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+		return (val - secVal), nil
 	} else if len(valuearray) == 3 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		thirdVal := interfaceToFloat(applyInterfaces(valuearray[2], data))
-		return (val - secVal - thirdVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+
+		thirdValue, err := applyInterfaces(valuearray[2], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		thirdVal := interfaceToFloat(thirdValue)
+		return (val - secVal - thirdVal), nil
 	}
 
-	return (-val)
+	return (-val), nil
 }
 
-func opDiv(value interface{}, data interface{}) float64 {
+func opDiv(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interfaceToFloat(applyInterfaces(value, data))
+		values, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return values, nil
 	}
-
-	val := interfaceToFloat(applyInterfaces(valuearray[0], data))
+	firstVal, err := applyInterfaces(valuearray[0], data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
+	val := interfaceToFloat(firstVal)
 	if len(valuearray) == 2 {
-		secVal := interfaceToFloat(applyInterfaces(valuearray[1], data))
-		return (val / secVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := interfaceToFloat(secValue)
+		return (val / secVal), nil
 	}
 
-	return val
+	return val, nil
 }
 
-func opMod(value interface{}, data interface{}) float64 {
+func opMod(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		return interfaceToFloat(applyInterfaces(value, data))
+		values, err := applyInterfaces(value, data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return values, nil
 	}
 
-	val := int(interfaceToFloat(applyInterfaces(valuearray[0], data)))
+	firstVal, err := applyInterfaces(valuearray[0], data)
+	if err != nil {
+		return nil, fmt.Errorf("error")
+	}
+	val := int(interfaceToFloat(firstVal))
 	if len(valuearray) == 2 {
-		secVal := int(interfaceToFloat(applyInterfaces(valuearray[1], data)))
-		return float64(val % secVal)
+		secValue, err := applyInterfaces(valuearray[1], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		secVal := int(interfaceToFloat(secValue))
+		return float64(val % secVal), nil
 	}
 
-	return float64(val)
+	return float64(val), nil
 }
 
-func opNot(value interface{}, data interface{}) bool {
+func opNot(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
-		return !(truthy(applyInterfaces(valuearray[0], data)))
+		val, err := applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return !(truthy(val)), nil
 	default:
-		return !(truthy(value))
+		return !(truthy(value)), nil
 	}
 }
 
-func opDoubleNot(value interface{}, data interface{}) bool {
+func opDoubleNot(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
-		return truthy(applyInterfaces(valuearray[0], data))
+		val, err := applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, fmt.Errorf("error")
+		}
+		return truthy(val), nil
 	default:
-		return truthy(value)
+		return truthy(value), nil
 	}
 }
