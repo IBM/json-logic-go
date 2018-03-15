@@ -191,18 +191,18 @@ func TestCat(t *testing.T) {
 
 func TestReduce(t *testing.T) {
 	var result interface{}
-	// result, _ = Apply(`{"reduce":[[true, true, true],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
-	// assert.Equal(t, true, result)
+	result, _ = Apply(`{"reduce":[[true, true, true],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
+	assert.Equal(t, true, result)
 
-	// result, _ = Apply(`{"reduce":[[true, true, false],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
-	// assert.Equal(t, false, result)
+	result, _ = Apply(`{"reduce":[[true, true, false],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
+	assert.Equal(t, false, result)
 
-	// result, _ = Apply(`{"reduce":[
-	// 	[50, 100, 150],
-	//    {"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]},
-	//    0
-	// ]}`)
-	// assert.Equal(t, float64(300), result)
+	result, _ = Apply(`{"reduce":[
+		[50, 100, 150],
+	   {"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]},
+	   0
+	]}`)
+	assert.Equal(t, float64(300), result)
 
 	// From the jsonlogic doc:
 	// Note, that inside the logic being used to reduce, var operations only have access to an object like:
@@ -214,9 +214,9 @@ func TestReduce(t *testing.T) {
 	// This rule should evaluate to nil because var operation does not comply with this constraint
 	result, _ = Apply(`{
 		"reduce": [
-			[1,2,3,4],
+			[1,2,3],
 			{"+": [{"var": "a"}, {"var": "b"}]},
-			0
+			10
 		]
 		}`,
 		`{
@@ -224,6 +224,19 @@ func TestReduce(t *testing.T) {
 		"b": 1000
 	}`)
 	assert.Equal(t, nil, result)
+
+	result, _ = Apply(`{
+		"reduce": [
+			[1,2,3],
+			{"+": [{"var": "accumulator"}, {"var": "accumulator"}]},
+			10
+		]
+		}`,
+		`{
+		"a": 100, 
+		"b": 1000
+	}`)
+	assert.Equal(t, float64(80), result)
 }
 
 // Helper function

@@ -1,9 +1,10 @@
 package jsonlogic
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func opReduce(value interface{}, data interface{}) (interface{}, error) {
-
 	valuearray := value.([]interface{})
 	array, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
@@ -11,9 +12,12 @@ func opReduce(value interface{}, data interface{}) (interface{}, error) {
 	}
 	operation := valuearray[1]
 	accumulator := valuearray[2]
-	fmt.Println("value is ", value)
-	fmt.Println("operation is ", operation)
-	fmt.Println("accumulator is ", accumulator)
+
+	//TODO : support dot notation in current variable
+	err = parseOperation(operation)
+	if err != nil {
+		return nil, err
+	}
 
 	if array == nil {
 		return accumulator, nil
@@ -23,15 +27,41 @@ func opReduce(value interface{}, data interface{}) (interface{}, error) {
 	for _, val := range array.([]interface{}) {
 		//  "current" : this element of the array
 		// "accumulator" : progress so far, or the initial value
-
 		dat["current"] = val
 		dat["accumulator"] = accumulator
 		accumulator, err = applyInterfaces(operation, dat)
-		fmt.Println("accum", accumulator)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	return accumulator, nil
+}
+
+func parseOperation(operation interface{}) error {
+	switch operation.(type) {
+	case map[string]interface{}:
+		for key, variable := range operation.(map[string]interface{}) {
+			switch variable.(type) {
+			case string:
+				if key == "var" && variable != "current" && variable != "accumulator" {
+					return fmt.Errorf("Error: wrong variable for reduce operator : %s", variable)
+				}
+			default:
+				if parseOperation(variable) != nil {
+					return parseOperation(variable)
+				}
+			}
+		}
+	case []interface{}:
+		for _, variable := range operation.([]interface{}) {
+			if parseOperation(variable) != nil {
+				return parseOperation(variable)
+			}
+
+		}
+	default:
+		return nil
+	}
+	return nil
 }
