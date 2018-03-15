@@ -1,7 +1,5 @@
 package jsonlogic
 
-import "fmt"
-
 func opOr(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	var lastValue interface{}
@@ -10,7 +8,7 @@ func opOr(value interface{}, data interface{}) (interface{}, error) {
 
 		lastValue, err = applyInterfaces(e, data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		if truthy(lastValue) {
 			return lastValue, nil

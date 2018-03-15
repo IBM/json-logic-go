@@ -1,16 +1,14 @@
 package jsonlogic
 
-import "fmt"
-
 func opEqual(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 
 	if isNumeric(leftValue) && isNumeric(rightValue) {
@@ -23,11 +21,11 @@ func opEqualStrict(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	return leftValue == rightValue, nil
 }
@@ -36,11 +34,11 @@ func opNotEqual(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 
 	if isNumeric(leftValue) && isNumeric(rightValue) {
@@ -53,11 +51,11 @@ func opNotEqualStrict(value interface{}, data interface{}) (interface{}, error) 
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 
 	return leftValue != rightValue, nil
@@ -67,11 +65,11 @@ func opSmallerThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
@@ -79,7 +77,7 @@ func opSmallerThan(value interface{}, data interface{}) (interface{}, error) {
 	if len(valuearray) == 3 {
 		thirdValue, err := applyInterfaces(valuearray[2], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		thirdVal := interfaceToFloat(thirdValue)
 		return (val < secVal) && (secVal < thirdVal), nil
@@ -92,18 +90,18 @@ func opGreaterThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
 	if len(valuearray) == 3 {
 		thirdValue, err := applyInterfaces(valuearray[2], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		thirdVal := interfaceToFloat(thirdValue)
 		return (val > secVal) && (secVal > thirdVal), nil
@@ -115,18 +113,18 @@ func opSmallerEqThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
 	if len(valuearray) == 3 {
 		thirdValue, err := applyInterfaces(valuearray[2], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		thirdVal := interfaceToFloat(thirdValue)
 		return (val <= secVal) && (secVal <= thirdVal), nil
@@ -138,18 +136,18 @@ func opGreaterEqThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	leftValue, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rightValue, err := applyInterfaces(valuearray[1], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
 	if len(valuearray) == 3 {
 		thirdValue, err := applyInterfaces(valuearray[2], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		thirdVal := interfaceToFloat(thirdValue)
 		return (val >= secVal) && (secVal >= thirdVal), nil

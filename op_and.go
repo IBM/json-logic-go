@@ -1,9 +1,5 @@
 package jsonlogic
 
-import (
-	"fmt"
-)
-
 func opAnd(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	var lastValue interface{}
@@ -11,7 +7,7 @@ func opAnd(value interface{}, data interface{}) (interface{}, error) {
 	for _, e := range valuearray {
 		lastValue, err = applyInterfaces(e, data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		if !truthy(lastValue) {
 			return lastValue, nil

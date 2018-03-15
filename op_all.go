@@ -1,9 +1,5 @@
 package jsonlogic
 
-import (
-	"fmt"
-)
-
 func opAll(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	inputs, _ := applyInterfaces(valuearray[0], data)
@@ -13,7 +9,7 @@ func opAll(value interface{}, data interface{}) (interface{}, error) {
 		for _, input := range inputs.([]interface{}) {
 			value, err := applyInterfaces(rule, input)
 			if err != nil {
-				return nil, fmt.Errorf("error")
+				return nil, err
 			}
 			if truthy(value) == false {
 				return false, nil

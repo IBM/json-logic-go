@@ -17,14 +17,14 @@ func opCustom(opName string, arg interface{}, data interface{}) (interface{}, er
 			for i, argExpr := range arg.([]interface{}) {
 				argValues[i], err = applyInterfaces(argExpr, data)
 				if err != nil {
-					return nil, fmt.Errorf("error")
+					return nil, err
 				}
 			}
 			return op(argValues...), nil
 		default:
 			args, err := applyInterfaces(arg, data)
 			if err != nil {
-				return nil, fmt.Errorf("error")
+				return nil, err
 			}
 			return (op(args)), nil
 		}

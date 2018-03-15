@@ -1,7 +1,5 @@
 package jsonlogic
 
-import "fmt"
-
 func opMax(value interface{}, data interface{}) (interface{}, error) {
 	_, max := findMinMax(value, data)
 
@@ -29,7 +27,7 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 
 		val, err := applyInterfaces(valuearray[0], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		if !isNumeric(val) {
 			return nil, nil
@@ -43,7 +41,7 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 		for i := 1; i < len(valuearray); i++ {
 			val, err = applyInterfaces(valuearray[i], data)
 			if err != nil {
-				return nil, fmt.Errorf("error")
+				return nil, err
 			}
 			if !isNumeric(val) {
 				return nil, nil
@@ -63,7 +61,7 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 	default: // A single value
 		val, err := applyInterfaces(value, data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 		if !isNumeric(val) {
 			return nil, nil

@@ -1,7 +1,6 @@
 package jsonlogic
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -16,7 +15,7 @@ func opIn(value interface{}, data interface{}) (interface{}, error) {
 	default:
 		subString, err = applyInterfaces(valuearray[0], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 	}
 
@@ -34,7 +33,7 @@ func opIn(value interface{}, data interface{}) (interface{}, error) {
 			default:
 				wordString, err := applyInterfaces(word, data)
 				if err != nil {
-					return nil, fmt.Errorf("error")
+					return nil, err
 				}
 				if subString.(string) == wordString.(string) {
 					return true, nil

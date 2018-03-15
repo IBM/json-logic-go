@@ -1,12 +1,10 @@
 package jsonlogic
 
-import "fmt"
-
 func opSome(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	inputs, err := applyInterfaces(valuearray[0], data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	rule := valuearray[1]
 
@@ -14,7 +12,7 @@ func opSome(value interface{}, data interface{}) (interface{}, error) {
 		for _, input := range inputs.([]interface{}) {
 			res, err := applyInterfaces(rule, input)
 			if err != nil {
-				return nil, fmt.Errorf("error")
+				return nil, err
 			}
 			if truthy(res) {
 				return true, nil

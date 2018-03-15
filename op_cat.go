@@ -1,7 +1,6 @@
 package jsonlogic
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -21,7 +20,7 @@ func opCat(value interface{}, data interface{}) (interface{}, error) {
 			default:
 				res, err := applyInterfaces(val, data)
 				if err != nil {
-					return nil, fmt.Errorf("error")
+					return nil, err
 				}
 				result += res.(string)
 			}
@@ -30,7 +29,7 @@ func opCat(value interface{}, data interface{}) (interface{}, error) {
 		if value != nil {
 			res, err := applyInterfaces(value, data)
 			if err != nil {
-				return nil, fmt.Errorf("error")
+				return nil, err
 			}
 			result = res.(string)
 		}

@@ -1,13 +1,9 @@
 package jsonlogic
 
-import (
-	"fmt"
-)
-
 func opMissingSome(value interface{}, data interface{}) (interface{}, error) {
 	processedValue, err := applyInterfaces(value, data)
 	if err != nil {
-		return nil, fmt.Errorf("error")
+		return nil, err
 	}
 	valuearray := processedValue.([]interface{})
 	targetCount := int(valuearray[0].(float64))

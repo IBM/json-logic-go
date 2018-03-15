@@ -1,7 +1,5 @@
 package jsonlogic
 
-import "fmt"
-
 func opSubstr(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
 	var subString interface{}
@@ -12,7 +10,7 @@ func opSubstr(value interface{}, data interface{}) (interface{}, error) {
 	default:
 		subString, err = applyInterfaces(valuearray[0], data)
 		if err != nil {
-			return nil, fmt.Errorf("error")
+			return nil, err
 		}
 	}
 
