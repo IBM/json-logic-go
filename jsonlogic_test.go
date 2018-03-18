@@ -244,6 +244,15 @@ func TestReduce(t *testing.T) {
 	assert.Equal(t, nil, result)
 }
 
+func TestIn(t *testing.T) {
+	var result interface{}
+	result, _ = Apply(`{"in": ["Hello", {"var": "a"}]}`, `{"a": ["Hello", "World"]}`)
+	assert.Equal(t, true, result)
+
+	result, _ = Apply(`{"in": [5, {"var": "a"}]}`, `{"a": [5, 10]}`)
+	assert.Equal(t, true, result)
+}
+
 // Helper function
 func getJSON(url string, target interface{}) {
 	var client = http.Client{Timeout: 100 * time.Second}

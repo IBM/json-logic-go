@@ -6,36 +6,41 @@ import (
 
 func opIn(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	var subString interface{}
+	var needle, haystack interface{}
 	var err error
-	//check subString type
+	//check needle type
 	switch valuearray[0].(type) {
 	case string:
-		subString = valuearray[0].(string)
+		needle = valuearray[0].(string)
 	default:
-		subString, err = applyInterfaces(valuearray[0], data)
+		needle, err = applyInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	switch valuearray[1].(type) {
+	haystack, err = applyInterfaces(valuearray[1], data)
+	if err != nil {
+		return nil, err
+	}
+
+	switch haystack.(type) {
 	case string:
-		valuearray = value.([]interface{})
-		return strings.Contains(valuearray[1].(string), subString.(string)), nil
+		return strings.Contains(haystack.(string), needle.(string)), nil
 	case []interface{}:
-		for _, word := range valuearray[1].([]interface{}) {
+		for _, word := range haystack.([]interface{}) {
 			switch word.(type) {
 			case string:
-				if subString.(string) == word.(string) {
+				if needle.(string) == word.(string) {
 					return true, nil
 				}
+			// TODO: What if it is a numerical value or something else that is not a string?
 			default:
 				wordString, err := applyInterfaces(word, data)
 				if err != nil {
 					return nil, err
 				}
-				if subString.(string) == wordString.(string) {
+				if needle.(string) == wordString.(string) {
 					return true, nil
 				}
 				return false, nil
