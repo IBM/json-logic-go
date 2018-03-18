@@ -233,7 +233,7 @@ func TestReduce(t *testing.T) {
 		]
 		}`,
 		`{
-		"a": 100, 
+		"a": 100,
 		"b": 1000
 	}`)
 	assert.Equal(t, float64(80), result)

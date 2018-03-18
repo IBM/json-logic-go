@@ -1,5 +1,9 @@
 package jsonlogic
 
+import (
+	"fmt"
+)
+
 func opVar(value interface{}, data interface{}) (interface{}, error) {
 	switch value.(type) {
 	case []interface{}: // An array of values
@@ -16,6 +20,9 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 					return nil, err
 				}
 			}
+			if dataLookup(data, value1, value2) == nil {
+				return nil, fmt.Errorf("No data found")
+			}
 			return dataLookup(data, value1, value2), nil
 		}
 		//Expected behavior for empty array is to return the entire data
@@ -25,6 +32,9 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 		res, err := applyInterfaces(value, data)
 		if err != nil {
 			return nil, err
+		}
+		if dataLookup(data, res, nil) == nil {
+			return nil, fmt.Errorf("No data found")
 		}
 		return dataLookup(data, res, nil), nil
 	}

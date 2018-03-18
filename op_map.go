@@ -3,11 +3,14 @@ package jsonlogic
 func opMap(value interface{}, data interface{}) ([]interface{}, error) {
 	valuearray := value.([]interface{})
 	array, err := applyInterfaces(valuearray[0], data)
+
+	var result []interface{}
+
 	if err != nil {
-		return nil, err
+		result = []interface{}{}
+		return result, err
 	}
 	operation := valuearray[1].(map[string]interface{})
-	var result []interface{}
 
 	if array == nil || len(array.([]interface{})) == 0 {
 		result = []interface{}{}
@@ -17,7 +20,9 @@ func opMap(value interface{}, data interface{}) ([]interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			result = append(result, res)
+			if res != nil {
+				result = append(result, res)
+			}
 		}
 	}
 	return result, nil
