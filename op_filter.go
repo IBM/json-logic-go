@@ -18,7 +18,11 @@ func opFilter(value interface{}, data interface{}) ([]interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		if truthy(res) {
+		ok, err := truthy(res)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
 			result = append(result, val)
 		}
 	}

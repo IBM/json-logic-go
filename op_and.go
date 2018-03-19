@@ -9,7 +9,11 @@ func opAnd(value interface{}, data interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		if !truthy(lastValue) {
+		ok, err := truthy(lastValue)
+		if err != nil {
+			return nil, err
+		}
+		if !ok {
 			return lastValue, nil
 		}
 	}

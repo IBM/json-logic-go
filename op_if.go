@@ -32,7 +32,11 @@ func opIf(value interface{}, data interface{}) (interface{}, error) {
 			return condition, nil
 		}
 
-		if truthy(condition) {
+		ok, err := truthy(condition)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
 			res, err := applyInterfaces(valuearray[1], data)
 			if err != nil {
 				return nil, err

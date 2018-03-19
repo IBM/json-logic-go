@@ -207,9 +207,17 @@ func opNot(value interface{}, data interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		return !(truthy(val)), nil
+		ok, err := truthy(val)
+		if err != nil {
+			return nil, err
+		}
+		return !ok, nil
 	default:
-		return !(truthy(value)), nil
+		ok, err := truthy(value)
+		if err != nil {
+			return nil, err
+		}
+		return !ok, nil
 	}
 }
 
@@ -222,8 +230,16 @@ func opDoubleNot(value interface{}, data interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		return truthy(val), nil
+		ok, err := truthy(val)
+		if err != nil {
+			return nil, err
+		}
+		return ok, nil
 	default:
-		return truthy(value), nil
+		ok, err := truthy(value)
+		if err != nil {
+			return nil, err
+		}
+		return ok, nil
 	}
 }

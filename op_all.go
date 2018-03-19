@@ -11,9 +11,14 @@ func opAll(value interface{}, data interface{}) (interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			if truthy(value) == false {
+			ok, err := truthy(value)
+			if err != nil {
+				return nil, err
+			}
+			if !ok {
 				return false, nil
 			}
+
 		}
 		return true, nil
 	}
