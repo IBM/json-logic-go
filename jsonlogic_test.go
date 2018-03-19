@@ -92,6 +92,12 @@ func TestMax(t *testing.T) {
 	result, _ = Apply(`{"max":["notnumber"]}`)
 	assert.Equal(t, nil, result)
 
+	result, _ = Apply(`{"max": {"var": "a"}}`, `{"a": [1, 2, 3]}`)
+	assert.Equal(t, 3.0, result)
+
+	result, _ = Apply(`{"max": [{"var": "a"}, {"var": "b"}, {"var": "c"}]}`, `{"a": 1, "b": 2, "c": 3}`)
+	assert.Equal(t, 3.0, result)
+
 }
 
 func TestMin(t *testing.T) {
@@ -111,6 +117,12 @@ func TestMin(t *testing.T) {
 
 	result, _ = Apply(`{"min":["notnumber"]}`)
 	assert.Equal(t, nil, result)
+
+	result, _ = Apply(`{"min": {"var": "a"}}`, `{"a": [1, 2, 3]}`)
+	assert.Equal(t, 1.0, result)
+
+	result, _ = Apply(`{"min": [{"var": "a"}, {"var": "b"}, {"var": "c"}]}`, `{"a": 1, "b": 2, "c": 3}`)
+	assert.Equal(t, 1.0, result)
 
 }
 
