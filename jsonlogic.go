@@ -7,18 +7,16 @@ import (
 )
 
 // stringToInterface converts a string json to an interface{}
-func stringToInterface(input string) interface{} {
+func stringToInterface(input string) (interface{}, error) {
 	b := []byte(input)
 	var f interface{}
 	err := json.Unmarshal(b, &f)
 
 	if err != nil {
-		log.Println("Unmarshal warning:", err)
-		// The API supports sending just plain string. How to differentiate between an invalid json and a plain string?
-		return input
+		return input, fmt.Errorf("Unmarshal warning: %s", err)
 	}
 
-	return f
+	return f, err
 }
 
 // Apply takes in a string rule and an optional string data and applies its logic
@@ -29,11 +27,18 @@ func Apply(inputs ...string) (interface{}, error) {
 		return nil, nil
 	}
 
-	rule = stringToInterface(inputs[0])
+	rule, err := stringToInterface(inputs[0])
+	if err != nil {
+		return nil, err
+	}
 
 	if len(inputs) > 1 {
 		//We have data inputs
-		data = stringToInterface(inputs[1])
+		data, err = stringToInterface(inputs[1])
+		if err != nil {
+			return nil, err
+		}
+
 	}
 
 	return applyInterfaces(rule, data)

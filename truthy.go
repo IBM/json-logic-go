@@ -21,6 +21,8 @@ func truthy(input interface{}) bool {
 		return len(input.(string)) != 0
 	case nil:
 		return false
+	case map[string]interface{}:
+		return true
 	default:
 		log.Println("truthy unexpected type", reflect.TypeOf(input))
 		return true

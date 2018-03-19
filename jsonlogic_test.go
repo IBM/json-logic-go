@@ -206,14 +206,17 @@ func TestIf(t *testing.T) {
 func TestCat(t *testing.T) {
 	var result interface{}
 
-	result, _ = Apply(`{ "cat" : ["Hello, ",{"var":""}] }`, `Dolly`)
-	assert.Equal(t, `Hello, Dolly`, result)
+	result, _ = Apply(`{ "cat" : ["Hello, ",{"var":""}] }`, `"Dolly"`)
+	assert.Equal(t, "Hello, Dolly", result)
 
-	result, _ = Apply(`{ "cat" : [{"var":""}] }`, `Dolly`)
-	assert.Equal(t, `Dolly`, result)
+	result, _ = Apply(`{ "cat" : [{"var":""}] }`, `"Dolly"`)
+	assert.Equal(t, "Dolly", result)
 
 	result, _ = Apply(`{ "cat" : {"var":""} }`, `Dolly`)
-	assert.Equal(t, `Dolly`, result)
+	assert.Equal(t, nil, result)
+
+	result, _ = Apply(`{ "cat" : {"var":""} }`, `"Dolly"`)
+	assert.Equal(t, "Dolly", result)
 
 	result, _ = Apply(`{ "cat" : {"var": "a"} }`, `{"a": ["Hello, ","Dolly"]}`)
 	assert.Equal(t, `Hello, Dolly`, result)
