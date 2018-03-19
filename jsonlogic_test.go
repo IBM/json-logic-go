@@ -135,6 +135,9 @@ func TestMin(t *testing.T) {
 func TestMap(t *testing.T) {
 	var result interface{}
 
+	result, _ = Apply(`{"map":[{"var":"integers"},{"*":[{"var":""},2]}]}`, `{"integers":[1,2,null,4,5]}`)
+	assert.Equal(t, []interface{}{2.0, 4.0, nil, 8.0, 10.0}, result)
+
 	result, _ = Apply(`{"map":[[1,2,3,4,5],{"*":[{"var":""},2]}]}`)
 	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
 
@@ -142,8 +145,17 @@ func TestMap(t *testing.T) {
 	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
 }
 
+func TestArithmetic(t *testing.T) {
+	var result interface{}
+
+	result, _ = Apply(`{"/":[4,0]}`)
+	assert.Equal(t, nil, result)
+}
 func TestIf(t *testing.T) {
 	var result interface{}
+
+	result, _ = Apply(`{ "if" : [] }`)
+	assert.Equal(t, nil, result)
 
 	result, _ = Apply(`{ "if" : [true, true, false] }`)
 	assert.Equal(t, true, result)

@@ -1,5 +1,9 @@
 package jsonlogic
 
+import (
+	"fmt"
+)
+
 func opSum(value interface{}, data interface{}) (interface{}, error) {
 	var valuearray []interface{}
 	switch value.(type) {
@@ -155,6 +159,9 @@ func opDiv(value interface{}, data interface{}) (interface{}, error) {
 			return nil, err
 		}
 		secVal := interfaceToFloat(secValue)
+		if secVal == float64(0) {
+			return nil, fmt.Errorf("divide by Zero")
+		}
 		return (val / secVal), nil
 	}
 
