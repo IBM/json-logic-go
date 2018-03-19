@@ -131,6 +131,9 @@ func TestMap(t *testing.T) {
 
 	result, _ = Apply(`{"map":[[1,2,3,4,5],{"*":[{"var":""},2]}]}`)
 	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
+
+	result, _ = Apply(`{"map":[{"var": "a"},{"*":[{"var":""},2]}]}`, `{"a": [1,2,3,4,5]}`)
+	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
 }
 
 func TestIf(t *testing.T) {
@@ -199,6 +202,9 @@ func TestCat(t *testing.T) {
 
 	result, _ = Apply(`{ "cat" : {"var":""} }`, `Dolly`)
 	assert.Equal(t, `Dolly`, result)
+
+	result, _ = Apply(`{ "cat" : {"var": "a"} }`, `{"a": ["Hello, ","Dolly"]}`)
+	assert.Equal(t, `Hello, Dolly`, result)
 }
 
 func TestReduce(t *testing.T) {
@@ -214,6 +220,13 @@ func TestReduce(t *testing.T) {
 	   {"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]},
 	   0
 	]}`)
+	assert.Equal(t, float64(300), result)
+
+	result, _ = Apply(`{"reduce":[
+		{"var": "a"},
+	   {"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]},
+	   0
+	]}`, `{"a": [50, 100, 150]}`)
 	assert.Equal(t, float64(300), result)
 
 	// From the jsonlogic doc:
@@ -263,6 +276,14 @@ func TestIn(t *testing.T) {
 
 	result, _ = Apply(`{"in": [5, {"var": "a"}]}`, `{"a": [5, 10]}`)
 	assert.Equal(t, true, result)
+
+}
+
+func TestMerge(t *testing.T) {
+	var result interface{}
+
+	result, _ = Apply(`{"merge": [{"var": "a"}, {"var": "b"}]}`, `{"a": [1,2,3], "b": [4,5,6]}`)
+	assert.Equal(t, []interface{}{1.0, 2.0, 3.0, 4.0, 5.0, 6.0}, result)
 }
 
 // Helper function
