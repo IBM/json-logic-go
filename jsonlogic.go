@@ -1,3 +1,4 @@
+// Package jsonlogic is a lightweight rule engine that uses the syntax defined on jsonlogic.com
 package jsonlogic
 
 import (
