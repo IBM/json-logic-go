@@ -16,14 +16,20 @@ import (
 // Tests as defined in http://jsonlogic.com/tests.json
 func TestRemote(t *testing.T) {
 	var testData interface{}
-	getJSON("http://jsonlogic.com/tests.json", &testData)
+	err := getJSON("http://jsonlogic.com/tests.json", &testData)
+	if err != nil {
+		log.Println("failed to get remote tests, using local")
+		err = getLocalJSON("tests.json", &testData)
+		if err != nil {
+			log.Fatal("Failed to load local tests, stop!")
+		}
+	}
 
 	testDataArray := testData.([]interface{})
 
 	var rule, data, expected interface{}
 	total := len(testDataArray)
 	success := 0
-
 	for _, test := range testDataArray {
 		switch test.(type) {
 		case []interface{}:
@@ -49,7 +55,7 @@ func TestRemote(t *testing.T) {
 		}
 	}
 
-	defer fmt.Println(success, "success out of", total)
+	log.Println(success, "success out of", total)
 
 }
 
@@ -301,25 +307,53 @@ func TestMerge(t *testing.T) {
 	assert.Equal(t, []interface{}{1.0, 2.0, 3.0, 4.0, 5.0, 6.0}, result)
 }
 
-// Helper function
-func getJSON(url string, target interface{}) {
+// Helper functions
+func getJSON(url string, target interface{}) error {
 	var client = http.Client{Timeout: 100 * time.Second}
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return err
 	}
-	res, getErr := client.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
+	res, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+		return err
 	}
 
-	jsonErr := json.Unmarshal(body, &target)
-	if jsonErr != nil {
-		log.Fatal(jsonErr)
+	if res.StatusCode != 200 {
+		err = fmt.Errorf("Request returned status code %v", res.StatusCode)
+		log.Println(err)
+		return err
 	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = json.Unmarshal(body, &target)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func getLocalJSON(filename string, target interface{}) error {
+	fileBody, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	err = json.Unmarshal(fileBody, &target)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }
