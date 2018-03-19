@@ -41,10 +41,7 @@ func TestRemote(t *testing.T) {
 			enc.SetEscapeHTML(false)
 			enc.Encode(test)
 			json := b.String()
-			actual, err := applyInterfaces(rule, data)
-			if err != nil {
-				//TODO: check errors
-			}
+			actual, _ := applyInterfaces(rule, data) //Ignoring error, I don't know which cases expect errors or not ...
 			ok := assert.Equal(t, expected, actual, json)
 			if ok {
 				success++
@@ -60,6 +57,30 @@ func TestRemote(t *testing.T) {
 }
 
 // Tests not covered by tests.json
+func TestJSON(t *testing.T) {
+	var result interface{}
+	var err error
+
+	// Invalid json rule
+	result, err = Apply(`{"and":[{"==":[1,1]},{"and":[{"==":[1,1]},{"==":[2,2]}]}]`)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+
+	// Invalid json data
+	result, err = Apply(`{"if": [{"var": "a"}, "yes", "no"]}`, `{"a": "var": "a"}}`)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+
+	result, err = Apply(`{"if": [{"var": "a"}, "yes", "no"]}`, `[`)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+
+	// Unknown operator
+	result, err = Apply(`{"if": [{"hOOUIGOFoyggf": "a"}, "yes", "no"]}`, `{"a": {"var": "a"}}`)
+	assert.Error(t, err)
+	assert.Nil(t, result)
+}
+
 func TestCompound(t *testing.T) {
 	var result interface{}
 
@@ -72,12 +93,19 @@ func TestCompound(t *testing.T) {
 }
 func TestVar(t *testing.T) {
 	var result interface{}
+	var err error
 
-	result, _ = Apply(`{"var": "a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.v.w.x.y"}`, `{"a":{"b":{"c":{"d":{"e":{"f":{"g":{"h":{"i":{"j":{"k":{"l":{"m":{"n":{"o":{"p":{"q":{"r":{"s":{"t":{"u":{"v":{"w":{"x":{"y":"z"}}}}}}}}}}}}}}}}}}}}}}}}}`)
+	result, err = Apply(`{"var": "a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s.t.u.v.w.x.y"}`, `{"a":{"b":{"c":{"d":{"e":{"f":{"g":{"h":{"i":{"j":{"k":{"l":{"m":{"n":{"o":{"p":{"q":{"r":{"s":{"t":{"u":{"v":{"w":{"x":{"y":"z"}}}}}}}}}}}}}}}}}}}}}}}}}`)
 	assert.Equal(t, "z", result)
+	assert.NoError(t, err)
 
-	result, _ = Apply(`{"if": [{"var": "a"}, "yes", "no"]}`, `{"a": {"var": "a"}}`)
+	result, err = Apply(`{"if": [{"var": "a"}, "yes", "no"]}`, `{"a": {"var": "a"}}`)
 	assert.Equal(t, "yes", result)
+	assert.NoError(t, err)
+
+	result, err = Apply(`{"var": "a"}`)
+	assert.Nil(t, result)
+	assert.Error(t, err)
 }
 
 func TestMax(t *testing.T) {
@@ -134,15 +162,27 @@ func TestMin(t *testing.T) {
 
 func TestMap(t *testing.T) {
 	var result interface{}
+	var err error
 
-	result, _ = Apply(`{"map":[{"var":"integers"},{"*":[{"var":""},2]}]}`, `{"integers":[1,2,null,4,5]}`)
+	result, err = Apply(`{"map":[{"var":"integers"},{"*":[{"var":""},2]}]}`, `{"integers":[1,2,null,4,5]}`)
 	assert.Equal(t, []interface{}{2.0, 4.0, nil, 8.0, 10.0}, result)
+	assert.NoError(t, err)
 
-	result, _ = Apply(`{"map":[[1,2,3,4,5],{"*":[{"var":""},2]}]}`)
+	result, err = Apply(`{"map":[[1,2,3,4,5],{"*":[{"var":""},2]}]}`)
 	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
+	assert.NoError(t, err)
 
-	result, _ = Apply(`{"map":[{"var": "a"},{"*":[{"var":""},2]}]}`, `{"a": [1,2,3,4,5]}`)
+	result, err = Apply(`{"map":[{"var": "a"},{"*":[{"var":""},2]}]}`, `{"a": [1,2,3,4,5]}`)
 	assert.Equal(t, []interface{}{2.0, 4.0, 6.0, 8.0, 10.0}, result)
+	assert.NoError(t, err)
+
+	result, err = Apply(`{"map":[{"var": "a"},{"*":[{"var":""},2]}]}`)
+	assert.Nil(t, result)
+	assert.Error(t, err)
+
+	result, err = Apply(`{"map":[{"var": "a"},{"*":[{"var":"b"},2]}]}`, `{"a": [1,2,3,4,5]}`)
+	assert.Nil(t, result)
+	assert.Error(t, err)
 }
 
 func TestArithmetic(t *testing.T) {
@@ -171,9 +211,6 @@ func TestIf(t *testing.T) {
 
 	result, _ = Apply(`{ "if" : [{"==": [1, 2]}, "yes", "no"] }`)
 	assert.Equal(t, "no", result)
-
-	result, _ = Apply(`{ "if" : []}`)
-	assert.Equal(t, nil, result)
 
 	result, _ = Apply(`{ "if" : null}`)
 	assert.Equal(t, nil, result)
@@ -230,6 +267,8 @@ func TestCat(t *testing.T) {
 
 func TestReduce(t *testing.T) {
 	var result interface{}
+	var err error
+
 	result, _ = Apply(`{"reduce":[[true, true, true],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
 	assert.Equal(t, true, result)
 
@@ -284,10 +323,11 @@ func TestReduce(t *testing.T) {
 	}`)
 	assert.Equal(t, float64(80), result)
 
-	result, _ = Apply(`{
+	result, err = Apply(`{
 		"reduce":[{"var":"desserts"},{"+":[{"var":"accumulator"},{"var":"current.wrong"}]},0]}`,
 		`{"desserts":[{"name":"apple","qty":1},{"name":"brownie","qty":2},{"name":"cupcake","qty":3}]}`)
-	assert.Equal(t, nil, result)
+	assert.Nil(t, result)
+	assert.Error(t, err)
 }
 
 func TestIn(t *testing.T) {
@@ -302,9 +342,15 @@ func TestIn(t *testing.T) {
 
 func TestMerge(t *testing.T) {
 	var result interface{}
+	var err error
 
-	result, _ = Apply(`{"merge": [{"var": "a"}, {"var": "b"}]}`, `{"a": [1,2,3], "b": [4,5,6]}`)
+	result, err = Apply(`{"merge": [{"var": "a"}, {"var": "b"}]}`, `{"a": [1,2,3], "b": [4,5,6]}`)
 	assert.Equal(t, []interface{}{1.0, 2.0, 3.0, 4.0, 5.0, 6.0}, result)
+	assert.NoError(t, err)
+
+	result, err = Apply(`{"merge": [{"var":"integers"}, [1]]}`)
+	assert.Error(t, err)
+	assert.Nil(t, result)
 }
 
 // Helper functions
