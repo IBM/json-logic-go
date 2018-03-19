@@ -58,6 +58,11 @@ func applyInterfaces(inputs ...interface{}) (interface{}, error) {
 		inputmap := rule.(map[string]interface{})
 
 		for operator, value := range inputmap {
+			value, err := applyInterfaces(value, data)
+			if err != nil {
+				return nil, err
+			}
+
 			switch operator {
 			case "===":
 				return opEqualStrict(value, data)
