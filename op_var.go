@@ -1,8 +1,6 @@
 package jsonlogic
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func opVar(value interface{}, data interface{}) (interface{}, error) {
 	switch value.(type) {
@@ -20,10 +18,7 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 					return nil, err
 				}
 			}
-			if dataLookup(data, value1, value2) == nil {
-				return nil, fmt.Errorf("No data found")
-			}
-			return dataLookup(data, value1, value2), nil
+			return dataLookup(data, value1, value2)
 		}
 		//Expected behavior for empty array is to return the entire data
 		return data, nil
@@ -33,9 +28,13 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		if dataLookup(data, res, nil) == nil {
-			return nil, fmt.Errorf("No data found")
+		result, err := dataLookup(data, res, nil)
+		if err != nil {
+			return nil, err
 		}
-		return dataLookup(data, res, nil), nil
+		if result == nil {
+			return nil, fmt.Errorf("element Not found")
+		}
+		return dataLookup(data, res, nil)
 	}
 }

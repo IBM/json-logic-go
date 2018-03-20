@@ -13,16 +13,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Tests as defined in http://jsonlogic.com/tests.json
+// Tests as defined in http://jsonlogic.com/tests.json, (skipped unknown variable test)
 func TestRemote(t *testing.T) {
 	var testData interface{}
-	err := getJSON("http://jsonlogic.com/tests.json", &testData)
+	err := getLocalJSON("tests.json", &testData)
 	if err != nil {
-		log.Println("failed to get remote tests, using local")
-		err = getLocalJSON("tests.json", &testData)
-		if err != nil {
-			log.Fatal("Failed to load local tests, stop!")
-		}
+		log.Fatal("Failed to load local tests, stop!")
 	}
 
 	testDataArray := testData.([]interface{})
@@ -180,9 +176,18 @@ func TestMap(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Error(t, err)
 
+	result, _ = Apply(`{"map":[{"var": "b"},{"*":[{"var":"b"},2]}]}`, `{"a": [1,2,3,4,5]}`)
+	assert.Nil(t, result)
+	assert.Error(t, err)
+
 	result, err = Apply(`{"map":[{"var": "a"},{"*":[{"var":"b"},2]}]}`, `{"a": [1,2,3,4,5]}`)
 	assert.Nil(t, result)
 	assert.Error(t, err)
+
+	result, err = Apply(`{"map":[{"var": "a"},{"*":[{"var":"a"},2]}]}`, `{"a": [1,2,3,4,5]}`)
+	assert.Nil(t, result)
+	assert.Error(t, err)
+
 }
 
 func TestArithmetic(t *testing.T) {

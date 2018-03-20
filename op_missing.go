@@ -12,13 +12,15 @@ func opMissing(value interface{}, data interface{}) (interface{}, error) {
 		valuearray := processedValue.([]interface{})
 
 		for _, e := range valuearray {
-			if dataLookup(data, e, nil) == nil {
+			res, _ := dataLookup(data, e, nil)
+			if res == nil {
 				resultArray = append(resultArray, e)
 			}
 		}
 
 	default: //single value
-		if dataLookup(data, processedValue, nil) == nil {
+		res, _ := dataLookup(data, processedValue, nil)
+		if res == nil {
 			resultArray = append(resultArray, processedValue)
 		}
 	}

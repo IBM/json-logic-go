@@ -17,7 +17,8 @@ func opMissingSome(value interface{}, data interface{}) (interface{}, error) {
 		inputarray := input.([]interface{})
 
 		for _, e := range inputarray {
-			if dataLookup(data, e, nil) == nil {
+			res, _ := dataLookup(data, e, nil)
+			if res == nil {
 				resultArray = append(resultArray, e)
 			} else {
 				found++
@@ -25,7 +26,8 @@ func opMissingSome(value interface{}, data interface{}) (interface{}, error) {
 		}
 
 	default: //single value
-		if dataLookup(data, input, nil) == nil {
+		res, _ := dataLookup(data, input, nil)
+		if res == nil {
 			resultArray = append(resultArray, input)
 		} else {
 			found++
