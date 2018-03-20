@@ -3,7 +3,6 @@ package jsonlogic
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 )
 
 // stringToInterface converts a string json to an interface{}
@@ -139,7 +138,6 @@ func applyInterfaces(inputs ...interface{}) (interface{}, error) {
 				return opReduce(value, data)
 			default:
 				if res, err := opCustom(operator, value, data); err != nil {
-					log.Printf("Error: %s", err)
 					return nil, fmt.Errorf("Error: %s", err)
 				} else {
 					return res, nil

@@ -2,7 +2,6 @@ package jsonlogic
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 )
 
@@ -25,7 +24,6 @@ func truthy(input interface{}) (bool, error) {
 	case map[string]interface{}:
 		return true, nil
 	default:
-		log.Println("truthy unexpected type", reflect.TypeOf(input))
 		return false, fmt.Errorf("truthy unexpected type %v", reflect.TypeOf(input))
 	}
 }
