@@ -104,6 +104,14 @@ func TestVar(t *testing.T) {
 	assert.Error(t, err)
 }
 
+func TestLog(t *testing.T) {
+	var result interface{}
+	result, _ = Apply(`{"log":"log test"}`)
+	assert.Equal(t, "log test", result)
+
+	result, _ = Apply(`{"log":{"substr": [" log test_2 ", 1, -1]}}`)
+	assert.Equal(t, "log test_2", result)
+}
 func TestMax(t *testing.T) {
 	var result interface{}
 	var err error
@@ -169,6 +177,15 @@ func TestMin(t *testing.T) {
 func TestMap(t *testing.T) {
 	var result interface{}
 	var err error
+	result, err = Apply(`{"map":[{"var":"integers"}]}`, `{"integers":[]}`)
+	assert.Equal(t, []interface{}{}, result)
+
+	result, err = Apply(`{"map":[]}`)
+	assert.Equal(t, []interface{}{}, result)
+
+	result, err = Apply(`{"map":[{"var":"integers"}]}`, `{"integers":[1,2,null,4,5]}`)
+	assert.Equal(t, []interface{}{nil, nil, nil, nil, nil}, result)
+	assert.NoError(t, err)
 
 	result, err = Apply(`{"map":[{"var":"integers"},{"*":[{"var":""},2]}]}`, `{"integers":[1,2,null,4,5]}`)
 	assert.Equal(t, []interface{}{2.0, 4.0, nil, 8.0, 10.0}, result)
