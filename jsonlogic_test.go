@@ -106,6 +106,11 @@ func TestVar(t *testing.T) {
 
 func TestMax(t *testing.T) {
 	var result interface{}
+	var err error
+
+	result, err = Apply(`{"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]}`)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
 
 	result, _ = Apply(`{ "max" : [1,2] }`)
 	assert.Equal(t, float64(2), result)
@@ -132,6 +137,11 @@ func TestMax(t *testing.T) {
 
 func TestMin(t *testing.T) {
 	var result interface{}
+	var err error
+
+	result, err = Apply(`{"min": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]}`)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
 
 	result, _ = Apply(`{ "min" : [1,2] }`)
 	assert.Equal(t, float64(1), result)
@@ -273,6 +283,21 @@ func TestCat(t *testing.T) {
 func TestReduce(t *testing.T) {
 	var result interface{}
 	var err error
+
+	result, err = Apply(`{"reduce":[[50, 100, 150]]}`)
+	assert.Equal(t, nil, result)
+
+	result, err = Apply(`{"reduce":[[50, 100, 150],10]}`)
+	assert.Equal(t, float64(10), result)
+	assert.NoError(t, err)
+
+	result, err = Apply(`{"reduce":[[50, 100, 150],{"max": [{"var": "current"}, {"+":  [{"var":  "accumulator"}, 100] }]}]}`)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = Apply(`{"reduce":[[true, true, true],{"and": [{"var": "current"},{"var": "accumulator"}]}]}`)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
 
 	result, _ = Apply(`{"reduce":[[true, true, true],{"and": [{"var": "current"},{"var": "accumulator"}]},true]}`)
 	assert.Equal(t, true, result)
