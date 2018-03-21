@@ -121,30 +121,42 @@
     [{ "substr": ["jsonlogic", 1, -5] }, null, "son"],
 
     "Merge arrays", [{ "merge": [] }, null, []],
-    [{ "merge": [
+    [{
+        "merge": [
             [1]
-        ] }, null, [1]],
-    [{ "merge": [
+        ]
+    }, null, [1]],
+    [{
+        "merge": [
             [1],
             []
-        ] }, null, [1]],
-    [{ "merge": [
+        ]
+    }, null, [1]],
+    [{
+        "merge": [
             [1],
             [2]
-        ] }, null, [1, 2]],
-    [{ "merge": [
+        ]
+    }, null, [1, 2]],
+    [{
+        "merge": [
             [1],
             [2],
             [3]
-        ] }, null, [1, 2, 3]],
-    [{ "merge": [
+        ]
+    }, null, [1, 2, 3]],
+    [{
+        "merge": [
             [1, 2],
             [3]
-        ] }, null, [1, 2, 3]],
-    [{ "merge": [
+        ]
+    }, null, [1, 2, 3]],
+    [{
+        "merge": [
             [1],
             [2, 3]
-        ] }, null, [1, 2, 3]],
+        ]
+    }, null, [1, 2, 3]],
     "Given non-array arguments, merge converts them to arrays", [{ "merge": 1 }, null, [1]],
     [{ "merge": [1, 2] }, null, [1, 2]],
     [{ "merge": [1, [2]] }, null, [1, 2]],
@@ -159,15 +171,21 @@
     [{ "if": [true, "apple", "banana"] }, null, "apple"],
     [{ "if": [false, "apple", "banana"] }, null, "banana"],
 
-    "Empty arrays are falsey", [{ "if": [
+    "Empty arrays are falsey", [{
+        "if": [
             [], "apple", "banana"
-        ] }, null, "banana"],
-    [{ "if": [
+        ]
+    }, null, "banana"],
+    [{
+        "if": [
             [1], "apple", "banana"
-        ] }, null, "apple"],
-    [{ "if": [
+        ]
+    }, null, "apple"],
+    [{
+        "if": [
             [1, 2, 3, 4], "apple", "banana"
-        ] }, null, "apple"],
+        ]
+    }, null, "apple"],
 
     "Empty strings are falsey, all other strings are truthy", [{ "if": ["", "apple", "banana"] }, null, "banana"],
     [{ "if": ["zucchini", "apple", "banana"] }, null, "apple"],
@@ -183,20 +201,28 @@
     [{ "if": [3.1416, "apple", "banana"] }, null, "apple"],
     [{ "if": [-1, "apple", "banana"] }, null, "apple"],
 
-    "Truthy and falsy definitions matter in Boolean operations", [{ "!": [
+    "Truthy and falsy definitions matter in Boolean operations", [{
+        "!": [
             []
-        ] }, {}, true],
-    [{ "!!": [
+        ]
+    }, {}, true],
+    [{
+        "!!": [
             []
-        ] }, {}, false],
-    [{ "and": [
+        ]
+    }, {}, false],
+    [{
+            "and": [
                 [], true
-            ] }, {},
+            ]
+        }, {},
         []
     ],
-    [{ "or": [
+    [{
+        "or": [
             [], true
-        ] }, {}, true],
+        ]
+    }, {}, true],
 
     [{ "!": [0] }, {}, true],
     [{ "!!": [0] }, {}, false],
@@ -267,9 +293,11 @@
     ],
     [{ "and": [{ "<": [{ "var": "temp" }, 110] }, { "==": [{ "var": "pie.filling" }, "apple"] }] }, { "temp": 100, "pie": { "filling": "apple" } }, true],
     [{ "var": [{ "?:": [{ "<": [{ "var": "temp" }, 110] }, "pie.filling", "pie.eta"] }] }, { "temp": 100, "pie": { "filling": "apple", "eta": "60s" } }, "apple"],
-    [{ "in": [{ "var": "filling" },
+    [{
+        "in": [{ "var": "filling" },
             ["apple", "cherry"]
-        ] }, { "filling": "apple" }, true],
+        ]
+    }, { "filling": "apple" }, true],
     [{ "var": "a.b.c" }, null, null],
     [{ "var": "a.b.c" }, { "a": null }, null],
     [{ "var": "a.b.c" }, { "a": { "b": null } }, null],
@@ -348,20 +376,30 @@
     "Missing and If are friends, because empty arrays are falsey in JsonLogic", [{ "if": [{ "missing": "a" }, "missed it", "found it"] }, { "a": "apple" }, "found it"],
     [{ "if": [{ "missing": "a" }, "missed it", "found it"] }, { "b": "banana" }, "missed it"],
 
-    "Missing, Merge, and If are friends. VIN is always required, APR is only required if financing is true.", [
-        { "missing": { "merge": ["vin", { "if": [{ "var": "financing" },
+    "Missing, Merge, and If are friends. VIN is always required, APR is only required if financing is true.", [{
+            "missing": {
+                "merge": ["vin", {
+                    "if": [{ "var": "financing" },
                         ["apr"],
                         []
-                    ] }] } },
+                    ]
+                }]
+            }
+        },
         { "financing": true },
         ["vin", "apr"]
     ],
 
-    [
-        { "missing": { "merge": ["vin", { "if": [{ "var": "financing" },
+    [{
+            "missing": {
+                "merge": ["vin", {
+                    "if": [{ "var": "financing" },
                         ["apr"],
                         []
-                    ] }] } },
+                    ]
+                }]
+            }
+        },
         { "financing": false },
         ["vin"]
     ],
@@ -413,16 +451,6 @@
         },
         { "integers": [1, 2, 3, 4] },
         10
-    ],
-    [{
-            "reduce": [
-                { "var": "integers" },
-                { "+": [{ "var": "current" }, { "var": "accumulator" }] },
-                0
-            ]
-        },
-        null,
-        0
     ],
     [{
             "reduce": [
