@@ -17,10 +17,11 @@ func opSum(value interface{}, data interface{}) (interface{}, error) {
 		return interfaceToFloat(values), nil
 	}
 	lastValue, err := applyInterfaces(valuearray[0], data)
-	val := interfaceToFloat(lastValue)
 	if err != nil {
 		return nil, err
 	}
+	val := interfaceToFloat(lastValue)
+
 	if len(valuearray) == 2 {
 		secValue, err := applyInterfaces(valuearray[1], data)
 		if err != nil {
