@@ -6,14 +6,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func myOp(args ...interface{}) interface{} {
-	return "Hi " + args[0].(string) + "!"
+func myOp(args ...interface{}) (interface{}, error) {
+	return "Hi " + args[0].(string) + "!", nil
 }
 
-func add(args ...interface{}) interface{} {
+func add(args ...interface{}) (interface{}, error) {
 	x, y := float64(args[0].(float64)), float64(args[1].(float64))
 
-	return x + y
+	return (x + y), nil
 }
 
 func TestAddOperation(t *testing.T) {

@@ -6,7 +6,7 @@ func opOr(value interface{}, data interface{}) (interface{}, error) {
 	var err error
 	for _, e := range valuearray {
 
-		lastValue, err = applyInterfaces(e, data)
+		lastValue, err = ApplyJSONInterfaces(e, data)
 		if err != nil {
 			return nil, err
 		}

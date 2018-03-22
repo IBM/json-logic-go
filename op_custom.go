@@ -4,9 +4,12 @@ import (
 	"fmt"
 )
 
-type operation func(args ...interface{}) interface{}
+// Operation defines an operation with function signature:
+// `func(args ...interface{}) (interface{}, error)`
+// The first argument is the value(s) passed to the operation, the second argument is an optional data array.
+type Operation func(args ...interface{}) (interface{}, error)
 
-var operations map[string]operation = make(map[string]operation)
+var operations = make(map[string]Operation)
 
 func opCustom(opName string, arg interface{}, data interface{}) (interface{}, error) {
 	if op, ok := operations[opName]; ok {
@@ -15,18 +18,18 @@ func opCustom(opName string, arg interface{}, data interface{}) (interface{}, er
 			var err error
 			argValues := make([]interface{}, len(arg.([]interface{})))
 			for i, argExpr := range arg.([]interface{}) {
-				argValues[i], err = applyInterfaces(argExpr, data)
+				argValues[i], err = ApplyJSONInterfaces(argExpr, data)
 				if err != nil {
 					return nil, err
 				}
 			}
-			return op(argValues...), nil
+			return op(argValues...)
 		default:
-			args, err := applyInterfaces(arg, data)
+			args, err := ApplyJSONInterfaces(arg, data)
 			if err != nil {
 				return nil, err
 			}
-			return (op(args)), nil
+			return op(args)
 		}
 
 	}
@@ -34,7 +37,9 @@ func opCustom(opName string, arg interface{}, data interface{}) (interface{}, er
 	return nil, fmt.Errorf("Unknown uperation: %s", opName)
 }
 
-func AddOperation(name string, implementation operation) error {
+// AddOperation allows you to add a custom operation that will run a Go function.
+// The `implementation` must be an `Operation`. See type definition.
+func AddOperation(name string, implementation Operation) error {
 	if _, ok := operations[name]; ok {
 		return fmt.Errorf("Operation exists: %s", name)
 	}

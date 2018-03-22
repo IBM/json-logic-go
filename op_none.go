@@ -7,7 +7,7 @@ func opNone(value interface{}, data interface{}) (interface{}, error) {
 	var err error
 	valuearray := value.([]interface{})
 	if len(valuearray) > 0 {
-		inputs, err = applyInterfaces(valuearray[0], data)
+		inputs, err = ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}
@@ -18,7 +18,7 @@ func opNone(value interface{}, data interface{}) (interface{}, error) {
 	switch inputs.(type) {
 	case []interface{}:
 		for _, input := range inputs.([]interface{}) {
-			lastValue, err := applyInterfaces(rule, input)
+			lastValue, err := ApplyJSONInterfaces(rule, input)
 			if err != nil {
 				return nil, err
 			}

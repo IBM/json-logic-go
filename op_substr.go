@@ -8,7 +8,7 @@ func opSubstr(value interface{}, data interface{}) (interface{}, error) {
 	case string:
 		subString = valuearray[0].(string)
 	default:
-		subString, err = applyInterfaces(valuearray[0], data)
+		subString, err = ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}

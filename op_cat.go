@@ -18,7 +18,7 @@ func opCat(value interface{}, data interface{}) (interface{}, error) {
 			case float64:
 				result += strconv.Itoa((int(val.(float64))))
 			default:
-				res, err := applyInterfaces(val, data)
+				res, err := ApplyJSONInterfaces(val, data)
 				if err != nil {
 					return nil, err
 				}
@@ -27,7 +27,7 @@ func opCat(value interface{}, data interface{}) (interface{}, error) {
 		}
 	default:
 		if value != nil {
-			res, err := applyInterfaces(value, data)
+			res, err := ApplyJSONInterfaces(value, data)
 			if err != nil {
 				return nil, err
 			}

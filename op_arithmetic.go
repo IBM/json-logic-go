@@ -10,20 +10,20 @@ func opSum(value interface{}, data interface{}) (interface{}, error) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		values, err := applyInterfaces(value, data)
+		values, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}
 		return interfaceToFloat(values), nil
 	}
-	lastValue, err := applyInterfaces(valuearray[0], data)
+	lastValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(lastValue)
 
 	if len(valuearray) == 2 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
@@ -33,14 +33,14 @@ func opSum(value interface{}, data interface{}) (interface{}, error) {
 
 	} else if len(valuearray) == 3 {
 		// sec value
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
 		secVal := interfaceToFloat(secValue)
 
 		// third value
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}
@@ -59,32 +59,32 @@ func opMult(value interface{}, data interface{}) (interface{}, error) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		values, err := applyInterfaces(value, data)
+		values, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}
 		return interfaceToFloat(values), nil
 	}
 
-	firstValue, err := applyInterfaces(valuearray[0], data)
+	firstValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(firstValue)
 	if len(valuearray) == 2 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
 		secVal := interfaceToFloat(secValue)
 		return (val * secVal), nil
 	} else if len(valuearray) == 3 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
 		secVal := interfaceToFloat(secValue)
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}
@@ -101,32 +101,32 @@ func opSub(value interface{}, data interface{}) (interface{}, error) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		values, err := applyInterfaces(value, data)
+		values, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}
 		return interfaceToFloat(values), nil
 	}
-	firstValue, err := applyInterfaces(valuearray[0], data)
+	firstValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(firstValue)
 	if len(valuearray) == 2 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
 		secVal := interfaceToFloat(secValue)
 		return (val - secVal), nil
 	} else if len(valuearray) == 3 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
 		secVal := interfaceToFloat(secValue)
 
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}
@@ -143,19 +143,19 @@ func opDiv(value interface{}, data interface{}) (interface{}, error) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		values, err := applyInterfaces(value, data)
+		values, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}
 		return values, nil
 	}
-	firstVal, err := applyInterfaces(valuearray[0], data)
+	firstVal, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(firstVal)
 	if len(valuearray) == 2 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
@@ -175,20 +175,20 @@ func opMod(value interface{}, data interface{}) (interface{}, error) {
 	case []interface{}:
 		valuearray = value.([]interface{})
 	default:
-		values, err := applyInterfaces(value, data)
+		values, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}
 		return values, nil
 	}
 
-	firstVal, err := applyInterfaces(valuearray[0], data)
+	firstVal, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
 	val := int(interfaceToFloat(firstVal))
 	if len(valuearray) == 2 {
-		secValue, err := applyInterfaces(valuearray[1], data)
+		secValue, err := ApplyJSONInterfaces(valuearray[1], data)
 		if err != nil {
 			return nil, err
 		}
@@ -204,7 +204,7 @@ func opNot(value interface{}, data interface{}) (interface{}, error) {
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
-		val, err := applyInterfaces(valuearray[0], data)
+		val, err := ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}
@@ -227,7 +227,7 @@ func opDoubleNot(value interface{}, data interface{}) (interface{}, error) {
 	switch value.(type) {
 	case []interface{}:
 		valuearray = value.([]interface{})
-		val, err := applyInterfaces(valuearray[0], data)
+		val, err := ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}

@@ -9,7 +9,7 @@ func opMerge(value interface{}, data interface{}) ([]interface{}, error) {
 			result = value.([]interface{})
 		}
 		for _, val := range valuearray {
-			processedValue, err := applyInterfaces(val, data)
+			processedValue, err := ApplyJSONInterfaces(val, data)
 			if err != nil {
 				return nil, err
 			}
@@ -26,7 +26,7 @@ func opMerge(value interface{}, data interface{}) ([]interface{}, error) {
 		}
 	default:
 		if value != nil {
-			res, err := applyInterfaces(value, data)
+			res, err := ApplyJSONInterfaces(value, data)
 			if err != nil {
 				return nil, err
 			}
