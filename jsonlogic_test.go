@@ -77,6 +77,29 @@ func TestJSON(t *testing.T) {
 	assert.Nil(t, result)
 }
 
+func TestUnSupportedType(t *testing.T) {
+
+	result, err := opAnd([]interface{}{[]byte{45, 32}}, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opOr([]interface{}{[]byte{45, 32}}, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opAll([]interface{}{[]byte{45, 32}}, 1)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opAll([]interface{}{nil}, 1)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opNone([]interface{}{}, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+}
 func TestCompound(t *testing.T) {
 	var result interface{}
 

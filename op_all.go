@@ -1,26 +1,42 @@
 package jsonlogic
 
+import "fmt"
+
 func opAll(value interface{}, data interface{}) (interface{}, error) {
+	var rule, inputs interface{}
+	var err error
 	valuearray := value.([]interface{})
-	inputs, _ := applyInterfaces(valuearray[0], data)
-	rule := valuearray[1]
-
-	if len(inputs.([]interface{})) > 0 {
-		for _, input := range inputs.([]interface{}) {
-			value, err := applyInterfaces(rule, input)
-			if err != nil {
-				return nil, err
-			}
-			ok, err := truthy(value)
-			if err != nil {
-				return nil, err
-			}
-			if !ok {
-				return false, nil
-			}
-
+	if len(valuearray) > 0 {
+		inputs, err = applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, err
 		}
-		return true, nil
+		if len(valuearray) == 2 {
+			rule = valuearray[1]
+		}
 	}
-	return false, nil
+	switch inputs.(type) {
+	case []interface{}:
+		if len(inputs.([]interface{})) > 0 {
+			for _, input := range inputs.([]interface{}) {
+				value, err := applyInterfaces(rule, input)
+				if err != nil {
+					return nil, err
+				}
+				ok, err := truthy(value)
+				if err != nil {
+					return nil, err
+				}
+				if !ok {
+					return false, nil
+				}
+
+			}
+			return true, nil
+		}
+		return false, nil
+	default:
+		return nil, fmt.Errorf("invalid input for all operator")
+	}
+
 }

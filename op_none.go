@@ -1,14 +1,22 @@
 package jsonlogic
 
-func opNone(value interface{}, data interface{}) (interface{}, error) {
-	valuearray := value.([]interface{})
-	inputs, err := applyInterfaces(valuearray[0], data)
-	if err != nil {
-		return nil, err
-	}
-	rule := valuearray[1]
+import "fmt"
 
-	if len(inputs.([]interface{})) > 0 {
+func opNone(value interface{}, data interface{}) (interface{}, error) {
+	var rule, inputs interface{}
+	var err error
+	valuearray := value.([]interface{})
+	if len(valuearray) > 0 {
+		inputs, err = applyInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, err
+		}
+		if len(valuearray) == 2 {
+			rule = valuearray[1]
+		}
+	}
+	switch inputs.(type) {
+	case []interface{}:
 		for _, input := range inputs.([]interface{}) {
 			lastValue, err := applyInterfaces(rule, input)
 			if err != nil {
@@ -23,6 +31,8 @@ func opNone(value interface{}, data interface{}) (interface{}, error) {
 			}
 		}
 		return true, nil
+	default:
+		return nil, fmt.Errorf("invalid input for none operator")
 	}
-	return true, nil
+
 }
