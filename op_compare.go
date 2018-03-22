@@ -2,11 +2,11 @@ package jsonlogic
 
 func opEqual(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
@@ -19,11 +19,11 @@ func opEqual(value interface{}, data interface{}) (interface{}, error) {
 
 func opEqualStrict(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
@@ -32,11 +32,11 @@ func opEqualStrict(value interface{}, data interface{}) (interface{}, error) {
 
 func opNotEqual(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
@@ -49,11 +49,11 @@ func opNotEqual(value interface{}, data interface{}) (interface{}, error) {
 
 func opNotEqualStrict(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
@@ -63,11 +63,11 @@ func opNotEqualStrict(value interface{}, data interface{}) (interface{}, error) 
 
 func opSmallerThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func opSmallerThan(value interface{}, data interface{}) (interface{}, error) {
 	secVal := interfaceToFloat(rightValue)
 
 	if len(valuearray) == 3 {
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}
@@ -88,18 +88,18 @@ func opSmallerThan(value interface{}, data interface{}) (interface{}, error) {
 
 func opGreaterThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
 	if len(valuearray) == 3 {
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}
@@ -111,18 +111,18 @@ func opGreaterThan(value interface{}, data interface{}) (interface{}, error) {
 
 func opSmallerEqThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
 	if len(valuearray) == 3 {
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}
@@ -134,18 +134,18 @@ func opSmallerEqThan(value interface{}, data interface{}) (interface{}, error) {
 
 func opGreaterEqThan(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	leftValue, err := applyInterfaces(valuearray[0], data)
+	leftValue, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
-	rightValue, err := applyInterfaces(valuearray[1], data)
+	rightValue, err := ApplyJSONInterfaces(valuearray[1], data)
 	if err != nil {
 		return nil, err
 	}
 	val := interfaceToFloat(leftValue)
 	secVal := interfaceToFloat(rightValue)
 	if len(valuearray) == 3 {
-		thirdValue, err := applyInterfaces(valuearray[2], data)
+		thirdValue, err := ApplyJSONInterfaces(valuearray[2], data)
 		if err != nil {
 			return nil, err
 		}

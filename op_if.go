@@ -23,7 +23,7 @@ func opIf(value interface{}, data interface{}) (interface{}, error) {
 			return nil, nil
 		}
 
-		condition, err := applyInterfaces(valuearray[0], data)
+		condition, err := ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}
@@ -37,7 +37,7 @@ func opIf(value interface{}, data interface{}) (interface{}, error) {
 			return nil, err
 		}
 		if ok {
-			res, err := applyInterfaces(valuearray[1], data)
+			res, err := ApplyJSONInterfaces(valuearray[1], data)
 			if err != nil {
 				return nil, err
 			}
@@ -51,7 +51,7 @@ func opIf(value interface{}, data interface{}) (interface{}, error) {
 		return nil, nil
 
 	default: // A single value
-		res, err := applyInterfaces(value, data)
+		res, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}

@@ -7,13 +7,13 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 	case []interface{}: // An array of values
 		valuearray := value.([]interface{})
 		if len(valuearray) > 0 {
-			value1, err := applyInterfaces(valuearray[0], data)
+			value1, err := ApplyJSONInterfaces(valuearray[0], data)
 			if err != nil {
 				return nil, err
 			}
 			var value2 interface{}
 			if len(valuearray) > 1 {
-				value2, err = applyInterfaces(valuearray[1], data)
+				value2, err = ApplyJSONInterfaces(valuearray[1], data)
 				if err != nil {
 					return nil, err
 				}
@@ -24,7 +24,7 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 		return data, nil
 
 	default: // A single value
-		res, err := applyInterfaces(value, data)
+		res, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, err
 		}

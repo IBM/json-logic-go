@@ -2,7 +2,7 @@ package jsonlogic
 
 func opNone(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	inputs, err := applyInterfaces(valuearray[0], data)
+	inputs, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
@@ -10,7 +10,7 @@ func opNone(value interface{}, data interface{}) (interface{}, error) {
 
 	if len(inputs.([]interface{})) > 0 {
 		for _, input := range inputs.([]interface{}) {
-			lastValue, err := applyInterfaces(rule, input)
+			lastValue, err := ApplyJSONInterfaces(rule, input)
 			if err != nil {
 				return nil, err
 			}

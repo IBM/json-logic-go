@@ -29,7 +29,7 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 			return nil, nil, nil
 		}
 
-		val, err := applyInterfaces(valuearray[0], data)
+		val, err := ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -43,7 +43,7 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 		var floatVal float64
 
 		for i := 1; i < len(valuearray); i++ {
-			val, err = applyInterfaces(valuearray[i], data)
+			val, err = ApplyJSONInterfaces(valuearray[i], data)
 			if err != nil {
 				return nil, nil, err
 			}
@@ -63,7 +63,7 @@ func findMinMax(value interface{}, data interface{}) (min interface{}, max inter
 		return min, max, nil
 
 	default: // A single value
-		val, err := applyInterfaces(value, data)
+		val, err := ApplyJSONInterfaces(value, data)
 		if err != nil {
 			return nil, nil, err
 		}

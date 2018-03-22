@@ -2,7 +2,7 @@ package jsonlogic
 
 func opReduce(value interface{}, data interface{}) (interface{}, error) {
 	valuearray := value.([]interface{})
-	array, err := applyInterfaces(valuearray[0], data)
+	array, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func opReduce(value interface{}, data interface{}) (interface{}, error) {
 		// "accumulator" : progress so far, or the initial value
 		dat["current"] = val
 		dat["accumulator"] = accumulator
-		accumulator, err = applyInterfaces(operation, dat)
+		accumulator, err = ApplyJSONInterfaces(operation, dat)
 		if err != nil {
 			return nil, err
 		}

@@ -1,7 +1,7 @@
 package jsonlogic
 
 func opMissingSome(value interface{}, data interface{}) (interface{}, error) {
-	processedValue, err := applyInterfaces(value, data)
+	processedValue, err := ApplyJSONInterfaces(value, data)
 	if err != nil {
 		return nil, err
 	}

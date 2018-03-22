@@ -37,7 +37,7 @@ func TestRemote(t *testing.T) {
 			enc.SetEscapeHTML(false)
 			enc.Encode(test)
 			json := b.String()
-			actual, _ := applyInterfaces(rule, data) //Ignoring error, I don't know which cases expect errors or not ...
+			actual, _ := ApplyJSONInterfaces(rule, data) //Ignoring error, I don't know which cases expect errors or not ...
 			ok := assert.Equal(t, expected, actual, json)
 			if ok {
 				success++

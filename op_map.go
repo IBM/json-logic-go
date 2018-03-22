@@ -5,7 +5,7 @@ func opMap(value interface{}, data interface{}) (interface{}, error) {
 	if len(valuearray) == 0 {
 		return []interface{}{}, nil
 	}
-	array, err := applyInterfaces(valuearray[0], data)
+	array, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func opMap(value interface{}, data interface{}) (interface{}, error) {
 		result = []interface{}{}
 	} else {
 		for _, val := range array.([]interface{}) {
-			res, err := applyInterfaces(operation, val)
+			res, err := ApplyJSONInterfaces(operation, val)
 			if err != nil && val != nil {
 				return nil, err
 			}
