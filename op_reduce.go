@@ -1,7 +1,20 @@
 package jsonlogic
 
+import "fmt"
+
 func opReduce(value interface{}, data interface{}) (interface{}, error) {
-	valuearray := value.([]interface{})
+	var err error
+	var valuearray []interface{}
+	switch value.(type) {
+	case []interface{}:
+		valuearray = value.([]interface{})
+	default:
+		return nil, fmt.Errorf("invalid input for Reduce operator")
+	}
+
+	if len(valuearray) == 0 {
+		return nil, nil
+	}
 	array, err := ApplyJSONInterfaces(valuearray[0], data)
 	if err != nil {
 		return nil, err

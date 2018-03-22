@@ -1,14 +1,40 @@
 package jsonlogic
 
+import "fmt"
+
 func opMissingSome(value interface{}, data interface{}) (interface{}, error) {
+	var valuearray []interface{}
+	var input interface{}
+	var targetCount int
 	processedValue, err := ApplyJSONInterfaces(value, data)
 	if err != nil {
 		return nil, err
 	}
-	valuearray := processedValue.([]interface{})
-	targetCount := int(valuearray[0].(float64))
+
+	switch processedValue.(type) {
+	case []interface{}:
+		valuearray = processedValue.([]interface{})
+	default:
+		return nil, fmt.Errorf("invalid input for Missing operator")
+	}
+
+	if len(valuearray) > 0 {
+		switch valuearray[0].(type) {
+		case float64:
+			targetCount = int(valuearray[0].(float64))
+		case float32:
+			targetCount = int(valuearray[0].(float32))
+		case int:
+			targetCount = valuearray[0].(int)
+		default:
+			return nil, fmt.Errorf("invalid input for Missing operator")
+		}
+
+		if len(valuearray) > 1 {
+			input = valuearray[1]
+		}
+	}
 	found := 0
-	input := valuearray[1]
 
 	var resultArray = []interface{}{}
 

@@ -5,13 +5,19 @@ import "fmt"
 func opNone(value interface{}, data interface{}) (interface{}, error) {
 	var rule, inputs interface{}
 	var err error
-	valuearray := value.([]interface{})
+	var valuearray []interface{}
+	switch value.(type) {
+	case []interface{}:
+		valuearray = value.([]interface{})
+	default:
+		return nil, fmt.Errorf("invalid input for None operator")
+	}
 	if len(valuearray) > 0 {
 		inputs, err = ApplyJSONInterfaces(valuearray[0], data)
 		if err != nil {
 			return nil, err
 		}
-		if len(valuearray) == 2 {
+		if len(valuearray) > 1 {
 			rule = valuearray[1]
 		}
 	}
@@ -32,7 +38,7 @@ func opNone(value interface{}, data interface{}) (interface{}, error) {
 		}
 		return true, nil
 	default:
-		return nil, fmt.Errorf("invalid input for none operator")
+		return nil, fmt.Errorf("invalid input for None operator")
 	}
 
 }

@@ -1,6 +1,6 @@
 package jsonlogic
 
-func opMerge(value interface{}, data interface{}) ([]interface{}, error) {
+func opMerge(value interface{}, data interface{}) (interface{}, error) {
 	var result []interface{}
 	switch value.(type) {
 	case []interface{}:
@@ -19,7 +19,7 @@ func opMerge(value interface{}, data interface{}) ([]interface{}, error) {
 				if err != nil {
 					return nil, err
 				}
-				result = append(result, res...)
+				result = append(result, res.([]interface{})...)
 			case interface{}:
 				result = append(result, processedValue)
 			}

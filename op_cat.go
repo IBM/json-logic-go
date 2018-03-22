@@ -1,6 +1,7 @@
 package jsonlogic
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -22,7 +23,13 @@ func opCat(value interface{}, data interface{}) (interface{}, error) {
 				if err != nil {
 					return nil, err
 				}
-				result += res.(string)
+				switch res.(type) {
+				case string:
+					result += res.(string)
+				default:
+					return nil, fmt.Errorf("invalid input for CAT operator")
+				}
+
 			}
 		}
 	default:
@@ -31,7 +38,12 @@ func opCat(value interface{}, data interface{}) (interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			result = res.(string)
+			switch res.(type) {
+			case string:
+				result = res.(string)
+			default:
+				return nil, fmt.Errorf("invalid input for CAT operator")
+			}
 		}
 	}
 	return result, nil

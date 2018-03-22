@@ -1,21 +1,32 @@
 package jsonlogic
 
 import (
+	"fmt"
 	"strings"
 )
 
 func opIn(value interface{}, data interface{}) (interface{}, error) {
-	valuearray := value.([]interface{})
+	var valuearray []interface{}
 	var needle, haystack interface{}
 	var err error
-	needle, err = ApplyJSONInterfaces(valuearray[0], data)
-	if err != nil {
-		return nil, err
+	switch value.(type) {
+	case []interface{}:
+		valuearray = value.([]interface{})
+	default:
+		return nil, fmt.Errorf("invalid input for AND operator")
 	}
 
-	haystack, err = ApplyJSONInterfaces(valuearray[1], data)
-	if err != nil {
-		return nil, err
+	if len(valuearray) > 0 {
+		needle, err = ApplyJSONInterfaces(valuearray[0], data)
+		if err != nil {
+			return nil, err
+		}
+		if len(valuearray) > 1 {
+			haystack, err = ApplyJSONInterfaces(valuearray[1], data)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 
 	switch haystack.(type) {

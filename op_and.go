@@ -1,7 +1,16 @@
 package jsonlogic
 
+import "fmt"
+
 func opAnd(value interface{}, data interface{}) (interface{}, error) {
-	valuearray := value.([]interface{})
+	var valuearray []interface{}
+	switch value.(type) {
+	case []interface{}:
+		valuearray = value.([]interface{})
+	default:
+		return nil, fmt.Errorf("invalid input for AND operator")
+	}
+
 	var lastValue interface{}
 	var err error
 	for _, e := range valuearray {

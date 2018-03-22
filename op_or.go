@@ -1,9 +1,17 @@
 package jsonlogic
 
+import "fmt"
+
 func opOr(value interface{}, data interface{}) (interface{}, error) {
-	valuearray := value.([]interface{})
-	var lastValue interface{}
 	var err error
+	var valuearray []interface{}
+	switch value.(type) {
+	case []interface{}:
+		valuearray = value.([]interface{})
+	default:
+		return nil, fmt.Errorf("invalid input for Or operator")
+	}
+	var lastValue interface{}
 	for _, e := range valuearray {
 
 		lastValue, err = ApplyJSONInterfaces(e, data)

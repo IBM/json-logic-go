@@ -78,16 +78,7 @@ func TestJSON(t *testing.T) {
 }
 
 func TestUnSupportedType(t *testing.T) {
-
-	result, err := opAnd([]interface{}{[]byte{45, 32}}, nil)
-	assert.Equal(t, nil, result)
-	assert.Error(t, err)
-
-	result, err = opOr([]interface{}{[]byte{45, 32}}, nil)
-	assert.Equal(t, nil, result)
-	assert.Error(t, err)
-
-	result, err = opAll([]interface{}{[]byte{45, 32}}, 1)
+	result, err := opAll([]byte{12}, nil)
 	assert.Equal(t, nil, result)
 	assert.Error(t, err)
 
@@ -95,7 +86,138 @@ func TestUnSupportedType(t *testing.T) {
 	assert.Equal(t, nil, result)
 	assert.Error(t, err)
 
-	result, err = opNone([]interface{}{}, nil)
+	result, err = opAnd(nil, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opAnd([]interface{}{[]byte{}}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opSum(true, nil)
+	assert.Equal(t, float64(0), result)
+
+	result, err = opSum([]interface{}{[]byte{}}, []interface{}{[]byte{}})
+	assert.Equal(t, float64(0), result)
+
+	result, err = opCat([]interface{}{[]byte{}}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opEqual(3, []byte{})
+	assert.Equal(t, false, result)
+
+	result, err = opEqual([]byte{}, []byte{})
+	assert.Equal(t, false, result)
+
+	result, err = opEqualStrict(3, []byte{})
+	assert.Equal(t, false, result)
+
+	result, err = opEqualStrict([]byte{}, []byte{})
+	assert.Equal(t, false, result)
+
+	result, err = opNotEqual(3, []byte{})
+	assert.Equal(t, true, result)
+
+	result, err = opNotEqual([]byte{}, []byte{})
+	assert.Equal(t, true, result)
+
+	result, err = opNotEqualStrict(3, []byte{})
+	assert.Equal(t, true, result)
+
+	result, err = opNotEqualStrict([]byte{}, []byte{})
+	assert.Equal(t, true, result)
+
+	result, err = opSmallerThan(1, []byte{})
+	assert.Equal(t, false, result)
+
+	result, err = opSmallerEqThan([]byte{}, []byte{})
+	assert.Equal(t, true, result)
+
+	result, err = opGreaterThan(1, []byte{})
+	assert.Equal(t, true, result)
+
+	result, err = opGreaterEqThan([]byte{}, nil)
+	assert.Equal(t, true, result)
+
+	result, err = opFilter(1, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opFilter([]byte{42}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opIf([]interface{}{[]byte{}}, []interface{}{[]byte{}})
+	assert.Equal(t, []uint8([]byte{}), result)
+
+	result, err = opIf(2, []interface{}{[]byte{}})
+	assert.Equal(t, 2, result)
+
+	result, err = opIn([]byte{}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opIn(1, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opLog([]byte{})
+	assert.Equal(t, []uint8([]byte{}), result)
+
+	result, err = opMap(nil, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opMap([]byte{}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opMap(1, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opMap([]interface{}{[]byte{}}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opMissingSome([]interface{}{[]byte{}}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opMissingSome([]byte{}, []interface{}{[]byte{}})
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opNone(1, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opOr(1, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opOr([]byte{12}, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opReduce([]byte{12}, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opSome([]byte{12}, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opSome(1, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opSubstr(1, nil)
+	assert.Equal(t, nil, result)
+	assert.Error(t, err)
+
+	result, err = opSubstr([]interface{}{[]byte{45, 32}}, nil)
 	assert.Equal(t, nil, result)
 	assert.Error(t, err)
 
