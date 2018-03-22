@@ -4,9 +4,9 @@ import (
 	"fmt"
 )
 
-type operation func(args ...interface{}) interface{}
+type operation func(args ...interface{}) (interface{}, error)
 
-var operations map[string]operation = make(map[string]operation)
+var operations = make(map[string]operation)
 
 func opCustom(opName string, arg interface{}, data interface{}) (interface{}, error) {
 	if op, ok := operations[opName]; ok {
@@ -20,13 +20,13 @@ func opCustom(opName string, arg interface{}, data interface{}) (interface{}, er
 					return nil, err
 				}
 			}
-			return op(argValues...), nil
+			return op(argValues...)
 		default:
 			args, err := applyInterfaces(arg, data)
 			if err != nil {
 				return nil, err
 			}
-			return (op(args)), nil
+			return op(args)
 		}
 
 	}
@@ -34,6 +34,9 @@ func opCustom(opName string, arg interface{}, data interface{}) (interface{}, er
 	return nil, fmt.Errorf("Unknown uperation: %s", opName)
 }
 
+// AddOperation allows you to add a custom operation that will run a Go function.
+// The `implementation` must be a function with signature `func(args ...interface{}) (interface{}, error)`.
+// The first argument is the value(s) passed to the operation, the second argument is an optional data array.
 func AddOperation(name string, implementation operation) error {
 	if _, ok := operations[name]; ok {
 		return fmt.Errorf("Operation exists: %s", name)
