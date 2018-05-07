@@ -25,11 +25,14 @@ func opCustom(opName string, arg interface{}, data interface{}) (interface{}, er
 			}
 			return op(argValues...)
 		default:
-			args, err := ApplyJSONInterfaces(arg, data)
-			if err != nil {
-				return nil, err
-			}
-			return op(args)
+			// This extra level of recursion was giving troubles when the retrieve data is a map itself...
+			// Commented out for now.
+			// args, err := ApplyJSONInterfaces(arg, data)
+			// if err != nil {
+			// 	return nil, err
+			// }
+			// return op(args)
+			return op(arg)
 		}
 
 	}
