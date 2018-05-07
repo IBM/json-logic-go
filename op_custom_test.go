@@ -1,6 +1,7 @@
 package jsonlogic
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,6 +15,24 @@ func add(args ...interface{}) (interface{}, error) {
 	x, y := float64(args[0].(float64)), float64(args[1].(float64))
 
 	return (x + y), nil
+}
+
+func getFirstWidget(args ...interface{}) (interface{}, error) {
+	if len(args) == 0 {
+		return nil, errors.New("Missing argument")
+	}
+
+	var widgets map[string]interface{}
+
+	widgets, ok := args[0].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("Not a map")
+	}
+
+	widgetsArray := widgets["Widget"].([]string)
+
+	return widgetsArray[0], nil
+
 }
 
 func TestAddOperation(t *testing.T) {
@@ -30,4 +49,12 @@ func TestAddOperation(t *testing.T) {
 	result, _ = Apply(`{"add": [{"if": [true, -1, 1]}, 2]}`)
 	assert.Equal(t, float64(1), result)
 
+}
+
+func TestGetWidgetOperation(t *testing.T) {
+	err := AddOperation("getFirstWidget", getFirstWidget)
+	assert.NoError(t, err)
+
+	result, _ := Apply(`{"getFirstWidget": {"var": ""}}`, `{"Widget": ["hello", "world"]}`)
+	assert.Equal(t, "hello", result)
 }
