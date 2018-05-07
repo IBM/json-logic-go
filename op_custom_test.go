@@ -29,7 +29,7 @@ func getFirstWidget(args ...interface{}) (interface{}, error) {
 		return nil, errors.New("Not a map")
 	}
 
-	widgetsArray := widgets["Widget"].([]string)
+	widgetsArray := widgets["Widget"].([]interface{})
 
 	return widgetsArray[0], nil
 
