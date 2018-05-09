@@ -42,19 +42,3 @@ func TestVarWithStruct(t *testing.T) {
 
 	assert.True(t, result.(bool))
 }
-
-func TestDataDrivenRule1(t *testing.T) {
-	result, err := Apply(`{ "var": ["a", 1] }`)
-
-	assert.NoError(t, err)
-
-	assert.Equal(t, float64(1), result)
-}
-
-func TestDataDrivenRule2(t *testing.T) {
-	result, err := Apply(`{"var":["b",2]}`, `{"a":1}`)
-
-	assert.NoError(t, err)
-
-	assert.Equal(t, float64(2), result)
-}
