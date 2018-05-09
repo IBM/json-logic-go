@@ -35,6 +35,6 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 		if result == nil {
 			return nil, fmt.Errorf("element Not found")
 		}
-		return dataLookup(data, res, nil)
+		return result, nil
 	}
 }

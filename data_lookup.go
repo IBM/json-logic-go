@@ -65,7 +65,7 @@ func dataLookup(data interface{}, index interface{}, defaultValue interface{}) (
 			return value.Float(), nil
 		case reflect.String:
 			return value.String(), nil
-		case reflect.Map, reflect.Struct, reflect.Interface:
+		case reflect.Map, reflect.Struct, reflect.Interface, reflect.Array, reflect.Slice:
 			return value.Interface(), nil
 		default:
 			return nil, errors.Errorf("Unsupported type: %v", value)
@@ -73,12 +73,12 @@ func dataLookup(data interface{}, index interface{}, defaultValue interface{}) (
 
 	case float64:
 		// Array index
-		switch data.(type) {
-		case []interface{}:
-			dataArray := data.([]interface{})
-			indexInt := int(index.(float64))
-			if len(dataArray) >= indexInt+1 {
-				return dataArray[indexInt], nil
+		metaData := reflect.ValueOf(data)
+		switch metaData.Kind() {
+		case reflect.Slice, reflect.Array:
+			i := int(index.(float64))
+			if i >= 0 && i < metaData.Len() {
+				return getValue(metaData.Index(i)), nil
 			}
 		}
 
