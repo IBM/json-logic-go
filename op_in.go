@@ -2,6 +2,7 @@ package jsonlogic
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -29,17 +30,40 @@ func opIn(value interface{}, data interface{}) (interface{}, error) {
 		}
 	}
 
-	switch haystack.(type) {
-	case string:
+	haystackMeta := reflect.ValueOf(haystack)
+
+	switch haystackMeta.Kind() {
+	case reflect.String:
 		return strings.Contains(haystack.(string), needle.(string)), nil
-	case []interface{}:
-		for _, word := range haystack.([]interface{}) {
-			if needle == word {
+	case reflect.Slice, reflect.Array:
+		len := haystackMeta.Len()
+		for i := 0; i < len; i++ {
+			if reflect.DeepEqual(needle, getValue(haystackMeta.Index(i))) {
 				return true, nil
 			}
 		}
 	default:
 		return false, nil
 	}
+
 	return false, nil
+}
+
+func getValue(metaValue reflect.Value) interface{} {
+	switch metaValue.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return float64(metaValue.Int())
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return float64(metaValue.Uint())
+	case reflect.Float32, reflect.Float64:
+		return metaValue.Float()
+	case reflect.String:
+		return metaValue.String()
+	case reflect.Bool:
+		return metaValue.Bool()
+	case reflect.Map, reflect.Array, reflect.Struct, reflect.Slice, reflect.Interface:
+		return metaValue.Interface()
+	}
+
+	return nil
 }
