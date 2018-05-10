@@ -27,7 +27,7 @@ cd $GOPATH/src/json-logic-go
 echo "***** Building Go code *****"
 go build --tags nopkcs11 ./...
 echo "***** Running Go tests *****"
-go test --tags nopkcs11 $(go list | grep -v vendor)
+go test --tags nopkcs11 $(go list ./... | grep -v vendor)
 
 # cleanup
 echo "***** Cleaning up *****"
