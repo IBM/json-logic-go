@@ -33,7 +33,7 @@ func opVar(value interface{}, data interface{}) (interface{}, error) {
 			return nil, err
 		}
 		if result == nil {
-			return nil, fmt.Errorf("element Not found")
+			return nil, fmt.Errorf("Element not found: %s", res)
 		}
 		return result, nil
 	}

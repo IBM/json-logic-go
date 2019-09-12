@@ -141,3 +141,22 @@ func TestVarFetchStructFromArrayField(t *testing.T) {
 
 	assert.True(t, product.CatNum == "1100", "Cat number does not match")
 }
+
+func TestVarWithElemNotFound(t *testing.T) {
+	var rule interface{}
+
+	err := json.Unmarshal([]byte(`{">": [{"var": "catalog.NOT_EXISTENT"}, 1.94]}`), &rule)
+
+	assert.NoError(t, err)
+
+	c := createCatalog()
+
+	result, err := ApplyJSONInterfaces(
+		rule,
+		map[string]interface{}{
+			"catalog": c,
+		})
+
+	assert.EqualError(t, err, "Element not found: catalog.NOT_EXISTENT")
+	assert.Nil(t, result)
+}
